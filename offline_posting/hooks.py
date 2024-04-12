@@ -11,6 +11,7 @@ app_license = "MIT"
 # include js, css files in header of desk.html
 # app_include_css = "/assets/offline_posting/css/offline_posting.css"
 # app_include_js = "/assets/offline_posting/js/offline_posting.js"
+app_include_js = "/assets/offline_posting/js/custom_button.js"
 
 # include js, css files in header of web template
 # web_include_css = "/assets/offline_posting/css/offline_posting.css"
@@ -30,7 +31,9 @@ app_license = "MIT"
 # doctype_js = {"doctype" : "public/js/doctype.js"}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
-# doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
+# doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"} sites/assets/offline_posting/js/custom_button.js
+
+doctype_js = { "Offline Sync": "public/js/custom_button.js"}
 
 # Home Pages
 # ----------
@@ -117,32 +120,58 @@ app_license = "MIT"
 # Hook on document methods and events
 
 # doc_events = {
-# 	"*": {
-# 		"on_update": "method",
-# 		"on_cancel": "method",
-# 		"on_trash": "method"
-# 	}
+# 	# "*": {
+# 		# "on_update": "method",
+# 	# 	"on_cancel": "method",
+# 	# 	"on_trash": "method"
+# 	# }
+ 
+#    "Offline Sync": {
+#         "on_update": "offline_posting.custom_api.sales_invoice.post_saved_documents"
+#     },
+   
+# #      "Item": {
+# #         "on_update": "offline_posting.custom_api.offline_sync.insert_item_post"
+# #     },
+   
+# #    "Offline Sync": {
+# #         "on_update": "offline_posting.custom_api.sales_invoice.post_saved_documents",
+# #         # "on_update": "offline_posting.api.post_item"
+# #     },
+   
+
+# #     "Customer": {
+# #         "on_update": "offline_posting.custom_api.customers.get_updates_customer"
+# #     },
+    
+  
 # }
 
 # Scheduled Tasks
 # ---------------
 
-# scheduler_events = {
-# 	"all": [
-# 		"offline_posting.tasks.all"
-# 	],
-# 	"daily": [
-# 		"offline_posting.tasks.daily"
-# 	],
-# 	"hourly": [
-# 		"offline_posting.tasks.hourly"
-# 	],
-# 	"weekly": [
-# 		"offline_posting.tasks.weekly"
-# 	],
-# 	"monthly": [
-# 		"offline_posting.tasks.monthly"
-# 	],
+# scheduler_events = {  
+#     "cron": {
+#         "*/5 * * * *": [
+#             "offline_posting.custom_api.sales_invoice.post_saved_documents",
+#         ]
+#     }
+    
+# 	# "all": [
+# 	# 	"offline_posting.tasks.all"
+# 	# ],
+# 	# "daily": [
+# 	# 	"offline_posting.tasks.daily"
+# 	# ],
+# 	# "hourly": [
+# 	# 	"offline_posting.tasks.hourly"
+# 	# ],
+# 	# "weekly": [
+# 	# 	"offline_posting.tasks.weekly"
+# 	# ],
+# 	# "monthly": [
+# 	# 	"offline_posting.tasks.monthly"
+# 	# ],
 # }
 
 # Testing
@@ -182,6 +211,8 @@ app_license = "MIT"
 # ----------
 # before_job = ["offline_posting.utils.before_job"]
 # after_job = ["offline_posting.utils.after_job"]
+fixtures = ['Custom Field']
+
 
 # User Data Protection
 # --------------------
