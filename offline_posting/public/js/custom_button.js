@@ -1,7 +1,7 @@
 frappe.ui.form.on('Offline Sync', {
     refresh: function(frm) {
         frm.add_custom_button(
-            __("Check Unsynced Data"),
+            __("Check Downloads Pending"),
             function () {
                 frappe.call({
                     method: 'offline_posting.custom_api.count_data.get_updates_item_count',
