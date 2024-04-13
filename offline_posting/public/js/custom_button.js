@@ -2,6 +2,22 @@ frappe.ui.form.on('Offline Sync', {
     refresh: function(frm) {
 
         frm.add_custom_button(
+            __("Customer"),
+            function () {
+                frappe.call({
+                    method: 'offline_posting.custom_api.customers.get_updates_customer',
+                    callback: function(response) {
+                        console.log(response);
+                        // Handle the response here
+                    }
+                });
+               
+                
+            },
+            __("Download Data")
+        );
+
+        frm.add_custom_button(
             __("Check Unsynced Data"),
             function () {
                 frappe.call({
