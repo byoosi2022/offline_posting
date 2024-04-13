@@ -211,7 +211,7 @@ doc_events = {
 # ----------
 # before_job = ["offline_posting.utils.before_job"]
 # after_job = ["offline_posting.utils.after_job"]
-fixtures = ['Custom Field']
+fixtures = ['Custom Field','Offline Sync']
 
 
 # User Data Protection

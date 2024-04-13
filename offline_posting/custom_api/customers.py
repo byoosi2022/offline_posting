@@ -7,7 +7,7 @@ import requests
 
 def get_updates_customer(doc=None, method=None, schedule_at=None):
     api_key, secret_key = get_api_keys()
-    url = "https://erp.metrogroupng.com/api/resource/Customer?filters=[['custom_update', '=', 1]]&fields=['customer_name','name','customer_type','customer_group','territory']"
+    url = "https://erp.metrogroupng.com/api/resource/Customer"
 
     headers = {
         "Content-Type": "application/json",
