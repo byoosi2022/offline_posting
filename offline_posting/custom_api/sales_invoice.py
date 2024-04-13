@@ -8,17 +8,17 @@ import json
 @frappe.whitelist()
 def post_saved_documents(doc=None, method=None, schedule_at=None):
     api_key, secret_key = get_api_keys()
-    url =      "https://erp.metrogroupng.com/api/resource/Sales Invoice"
+    url = "https://erp.metrogroupng.com/api/resource/Sales Invoice"
     headers = {
         "Content-Type": "application/json",
         "Authorization": f"token {api_key}:{secret_key}"
     }
-    
+
     unsynced_docs = frappe.db.get_all("Sales Invoice", filters={
         "custom_post": 1,
         "custom_return_code": ""
-    }, fields=["name", "paid_amount","update_stock","posting_date", "customer","company", "is_pos", "docstatus", "pos_profile"])
-    
+    }, fields=["name", "paid_amount", "update_stock", "posting_date", "customer", "company", "is_pos", "docstatus", "pos_profile"])
+
     if not unsynced_docs:
         return
 
@@ -28,7 +28,7 @@ def post_saved_documents(doc=None, method=None, schedule_at=None):
         items = frappe.get_all("Sales Invoice Item", filters={"parent": invoice_name},
                                fields=["item_code", "qty", "rate"])
         payments = frappe.get_all("Sales Invoice Payment", filters={"parent": invoice_name},
-                                   fields=["amount", "mode_of_payment","base_amount","account"])
+                                  fields=["amount", "mode_of_payment", "base_amount", "account"])
 
         try:
             customer = doc.get("customer")
@@ -80,7 +80,7 @@ def post_saved_documents(doc=None, method=None, schedule_at=None):
             frappe.db.set_value("Sales Invoice", doc["name"], "custom_main_content", res["data"]["name"])
             frappe.db.commit()
             frappe.log_error(f"SI {doc['name']} posted successfully in the other ERPNext system.")
-             
+
             # # Update the outstanding amount in ERPNext
             # doc_id = res["data"]["name"]
             # balance = res["data"]["outstanding_amount"]
@@ -94,8 +94,18 @@ def post_saved_documents(doc=None, method=None, schedule_at=None):
             # frappe.log_error(f"SI {doc['name']} Updated successfully in the other ERPNext system.")
             enqueue("offline_posting.custom_api.sales_invoice.post_saved_documents", queue='long')
         except (ValueError, requests.RequestException) as e:
+            # Log the error
             frappe.log_error(f"Failed to post item {doc['name']}: {e}")
+
+            # Extract errors from the response, if available
+            try:
+                errors = res["data"]["errors"]
+                frappe.log_error(f"Errors encountered: {errors}")
+            except KeyError:
+                pass  # No errors found in the response
+
             break
+
 
 def check_internet():
     try:
