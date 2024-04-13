@@ -1,96 +1,96 @@
 [
-   {
-    "doctype": "Custom Field",
-    "dt": "Item",
-    "label": "Post",
-    "module": "Offline Posting",
-    "fieldtype": "Check",
-    "name": "Item-post_name",
-    "insert_after": "item_name"
-   },
-   {
-      "doctype": "Custom Field",
-      "dt": "Item",
-      "label": "Return Code",
-      "fieldtype": "Data",
-      "module": "Offline Posting",
-      "name": "Item-custom_return_code",
-      "insert_after": "item_name"    
-     },
-      {
-        "doctype": "Custom Field",
-        "dt": "System Settings",
-        "label": "Internet Available",
-        "fieldtype": "Check",
-        "module": "Offline Posting",
-        "name": "internet_available",
-        "insert_after": "max_file_size"
-        
-       },
+    {
+     "doctype": "Custom Field",
+     "dt": "Item",
+     "label": "Post",
+     "module": "Offline Posting",
+     "fieldtype": "Check",
+     "name": "Item-post_name",
+     "insert_after": "item_name"
+    },
+    {
+       "doctype": "Custom Field",
+       "dt": "Item",
+       "label": "Return Code",
+       "fieldtype": "Data",
+       "module": "Offline Posting",
+       "name": "Item-custom_return_code",
+       "insert_after": "item_name"    
+      },
        {
-        "doctype": "Custom Field",
-        "dt": "User",
-        "label": "Password",
-        "fieldtype": "Data",
-        "module": "Offline Posting",
-        "name": "password",
-        "insert_after": "api_key"
-        
-       },
-  
-       {
-        "doctype": "Custom Field",
-        "dt": "Sales Invoice",
-        "label": "Post",
-        "module": "Offline Posting",
-        "fieldtype": "Check",
-        "name": "post_name",
-        "insert_after": "customer",
-        "allow_on_submit":1
-       },
-       {
-          "doctype": "Custom Field",
-          "dt": "Sales Invoice",
-          "label": "Return Code",
-          "fieldtype": "Data",
-          "module": "Offline Posting",
-          "name": "custom_return_code",
-          "insert_after": "customer",
-          "allow_on_submit":1
-         },
-         {
-            "doctype": "Custom Field",
-            "dt": "Sales Invoice",
-            "label": "Main Content",
-            "fieldtype": "Long Text",
-            "module": "Offline Posting",
-            "name": "custom_main_content",
-            "insert_after": "discount_amount",
-            "allow_on_submit":1
-        
-           },
-
-           {
-            "doctype": "Custom Field",
-            "dt": "Customer",
-            "label": "Post",
-            "module": "Offline Posting",
-            "fieldtype": "Check",
-            "name": "Customer-custom_post",
-            "insert_after": "custom_company",
-            "allow_on_submit":1
-           },
-           {
-              "doctype": "Custom Field",
-              "dt": "Customer",
-              "label": "Return Code",
-              "fieldtype": "Data",
-              "module": "Offline Posting",
-              "name": "Customer-custom_return_code",
-              "insert_after": "customer_name",
-              "allow_on_submit":1
-             }
-          
-  
-  
-  ]
+         "doctype": "Custom Field",
+         "dt": "System Settings",
+         "label": "Internet Available",
+         "fieldtype": "Check",
+         "module": "Offline Posting",
+         "name": "internet_available",
+         "insert_after": "max_file_size"
+         
+        },
+        {
+         "doctype": "Custom Field",
+         "dt": "User",
+         "label": "Password",
+         "fieldtype": "Data",
+         "module": "Offline Posting",
+         "name": "password",
+         "insert_after": "api_key"
+         
+        },
+   
+        {
+         "doctype": "Custom Field",
+         "dt": "Sales Invoice",
+         "label": "Post",
+         "module": "Offline Posting",
+         "fieldtype": "Check",
+         "name": "post_name",
+         "insert_after": "customer",
+         "allow_on_submit":1
+        },
+        {
+           "doctype": "Custom Field",
+           "dt": "Sales Invoice",
+           "label": "Return Code",
+           "fieldtype": "Data",
+           "module": "Offline Posting",
+           "name": "custom_return_code",
+           "insert_after": "customer",
+           "allow_on_submit":1
+          },
+          {
+             "doctype": "Custom Field",
+             "dt": "Sales Invoice",
+             "label": "Main Content",
+             "fieldtype": "Long Text",
+             "module": "Offline Posting",
+             "name": "custom_main_content",
+             "insert_after": "discount_amount",
+             "allow_on_submit":1
+         
+            },
+ 
+            {
+             "doctype": "Custom Field",
+             "dt": "Customer",
+             "label": "Post",
+             "module": "Offline Posting",
+             "fieldtype": "Check",
+             "name": "Customer-custom_post",
+             "insert_after": "custom_company",
+             "allow_on_submit":1
+            },
+            {
+               "doctype": "Custom Field",
+               "dt": "Customer",
+               "label": "Return Code",
+               "fieldtype": "Data",
+               "module": "Offline Posting",
+               "name": "Customer-custom_return_code",
+               "insert_after": "customer_name",
+               "allow_on_submit":1
+              }
+           
+   
+   
+   ]

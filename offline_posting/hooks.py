@@ -119,33 +119,33 @@ doctype_js = { "Offline Sync": "public/js/custom_button.js"}
 # ---------------
 # Hook on document methods and events
 
-# doc_events = {
-# 	# "*": {
-# 		# "on_update": "method",
-# 	# 	"on_cancel": "method",
-# 	# 	"on_trash": "method"
-# 	# }
+doc_events = {
+	# "*": {
+		# "on_update": "method",
+	# 	"on_cancel": "method",
+	# 	"on_trash": "method"
+	# }
  
-#    "Offline Sync": {
-#         "on_update": "offline_posting.custom_api.sales_invoice.post_saved_documents"
+   "Offline Sync": {
+        "on_update": "offline_posting.custom_api.customers.get_updates_customer"
+    },
+   
+#      "Item": {
+#         "on_update": "offline_posting.custom_api.offline_sync.insert_item_post"
 #     },
    
-# #      "Item": {
-# #         "on_update": "offline_posting.custom_api.offline_sync.insert_item_post"
-# #     },
-   
-# #    "Offline Sync": {
-# #         "on_update": "offline_posting.custom_api.sales_invoice.post_saved_documents",
-# #         # "on_update": "offline_posting.api.post_item"
-# #     },
+#    "Offline Sync": {
+#         "on_update": "offline_posting.custom_api.sales_invoice.post_saved_documents",
+#         # "on_update": "offline_posting.api.post_item"
+#     },
    
 
-# #     "Customer": {
-# #         "on_update": "offline_posting.custom_api.customers.get_updates_customer"
-# #     },
+#     "Customer": {
+#         "on_update": "offline_posting.custom_api.customers.get_updates_customer"
+#     },
     
   
-# }
+}
 
 # Scheduled Tasks
 # ---------------
