@@ -15,7 +15,8 @@ def check_internet():
         frappe.log_error("No internet connection")
 
 # Run the function once to check the internet status
-check_internet()
+# check_internet()
 
 # Enqueue the function call for periodic checking (e.g., every minute)
-enqueue("offline_posting.api.check_internet", queue='long', interval=60)
+# enqueue("offline_posting.api.check_internet", queue='long', interval=60)
+frappe.enqueue(check_internet, report="self.name")

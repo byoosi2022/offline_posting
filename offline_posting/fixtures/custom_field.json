@@ -89,7 +89,28 @@
                "name": "Customer-custom_return_code",
                "insert_after": "customer_name",
                "allow_on_submit":1
-              }
+              },
+ 
+              {
+               "doctype": "Custom Field",
+               "dt": "Purchase Receipt",
+               "label": "Post",
+               "module": "Offline Posting",
+               "fieldtype": "Check",
+               "name": "Purchase Receipt-custom_post",
+               "insert_after": "supplier_name",
+               "allow_on_submit":1
+              },
+              {
+                 "doctype": "Custom Field",
+                 "dt": "Purchase Receipt",
+                 "label": "Return Code",
+                 "fieldtype": "Data",
+                 "module": "Offline Posting",
+                 "name": "Purchase Receipt-custom_return_code",
+                 "insert_after": "supplier",
+                 "allow_on_submit":1
+                }
          
    
    

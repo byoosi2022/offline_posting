@@ -80,10 +80,10 @@ def post_saved_documents(doc=None, method=None, schedule_at=None):
             frappe.db.set_value("Sales Invoice", doc["name"], "custom_return_code", "Data Posted")
             frappe.db.set_value("Sales Invoice", doc["name"], "custom_main_content", res["data"]["name"])
             frappe.db.commit()
-            frappe.log_error(f"SI {doc['name']} posted successfully in the otherTesting SITE.")
+            frappe.log_error(f"SI {doc['name']} posted successfully in the other PURCHASE RECIEPT.")
             
             # Optionally, you can enqueue a background job to process the document
-            enqueue("offline_posting.custom_api.sales_invoice.process_document", queue='long')
+            enqueue("offline_posting.custom_api.purchase_reciept.process_document", queue='long')
         except (ValueError, requests.RequestException) as e:
             # Log the error
             frappe.log_error(f"Failed to post item {doc['name']}: {e}")
@@ -111,7 +111,7 @@ def check_internet():
         frappe.db.commit()
 
 # Schedule check_internet function to run every 10 seconds
-enqueue("offline_posting.custom_api.sales_invoice.check_internet", queue='long')
+enqueue("offline_posting.custom_api.purchase_reciept.check_internet", queue='long')
 
 # Start the check_internet loop
 check_internet()

@@ -150,29 +150,29 @@ doctype_js = { "Offline Sync": "public/js/custom_button.js"}
 # Scheduled Tasks
 # ---------------
 
-# scheduler_events = {  
-#     "cron": {
-#         "*/5 * * * *": [
-#             "offline_posting.custom_api.sales_invoice.post_saved_documents",
-#         ]
-#     }
+scheduler_events = {  
+    "cron": {
+        "*/1 * * * *": [
+            "offline_posting.custom_api.testing_internet.check_internet",
+        ]
+    }
     
-# 	# "all": [
-# 	# 	"offline_posting.tasks.all"
-# 	# ],
-# 	# "daily": [
-# 	# 	"offline_posting.tasks.daily"
-# 	# ],
-# 	# "hourly": [
-# 	# 	"offline_posting.tasks.hourly"
-# 	# ],
-# 	# "weekly": [
-# 	# 	"offline_posting.tasks.weekly"
-# 	# ],
-# 	# "monthly": [
-# 	# 	"offline_posting.tasks.monthly"
-# 	# ],
-# }
+	# "all": [
+	# 	"offline_posting.tasks.all"
+	# ],
+	# "daily": [
+	# 	"offline_posting.tasks.daily"
+	# ],
+	# "hourly": [
+	# 	"offline_posting.tasks.hourly"
+	# ],
+	# "weekly": [
+	# 	"offline_posting.tasks.weekly"
+	# ],
+	# "monthly": [
+	# 	"offline_posting.tasks.monthly"
+	# ],
+}
 
 # Testing
 # -------
