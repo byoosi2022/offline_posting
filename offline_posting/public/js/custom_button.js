@@ -6,17 +6,16 @@ frappe.ui.form.on('Offline Sync', {
                 frappe.call({
                     method: 'offline_posting.custom_api.count_data.get_updates_item_count',
                     callback: function(r) {
-                        // console.log(r);
                         if (r.message !== null) {
-                            var message = __("Customer Count: {0}, Item Price Count: {1}, Item Count: {2}, stock transfer Count: {3},Reciept Count: {4}");
-                            var counts = [
-                                r.message.customers_count,
-                                r.message.items_price_count,
-                                r.message.items_count,
-                                r.message.stock_transfer_count,
-                                r.message.reciept_count
-                            ];
-                            frappe.msgprint(__(message, counts));
+                            var message = `
+                                <div>
+                                    <strong>Customer Count:</strong> ${r.message.customers_count}<br>
+                                    <strong>Item Price Count:</strong> ${r.message.items_price_count}<br>
+                                    <strong>Item Count:</strong> ${r.message.items_count}<br>
+                                    <strong>Stock Transfer Count:</strong> ${r.message.stock_transfer_count}<br>
+                                    <strong>Receipt Count:</strong> ${r.message.reciept_count}<br>
+                                </div>`;
+                            frappe.msgprint(message);
                         } else {
                             frappe.msgprint(__('No Unsynced Data available.'));
                         }
@@ -25,8 +24,7 @@ frappe.ui.form.on('Offline Sync', {
             },
             __("Download Data")
         );
-        
-        
+         
         frm.add_custom_button(
             __("Customer"),
             function () {
