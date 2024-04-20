@@ -8,12 +8,13 @@ frappe.ui.form.on('Offline Sync', {
                     callback: function(r) {
                         // console.log(r);
                         if (r.message !== null) {
-                            var message = __("Customer Count: {0}, Item Price Count: {1}, Item Count: {2}, stock transfer Count: {3}");
+                            var message = __("Customer Count: {0}, Item Price Count: {1}, Item Count: {2}, stock transfer Count: {3},Reciept Count: {4}");
                             var counts = [
                                 r.message.customers_count,
                                 r.message.items_price_count,
                                 r.message.items_count,
-                                r.message.stock_transfer_count
+                                r.message.stock_transfer_count,
+                                r.message.reciept_count
                             ];
                             frappe.msgprint(__(message, counts));
                         } else {
@@ -72,6 +73,24 @@ frappe.ui.form.on('Offline Sync', {
             },
             __("Download Data")
         );
+
+        
+        frm.add_custom_button(
+            __("Purchase Reciept"),
+            function () {
+                frappe.call({
+                    method: 'offline_posting.custom_api.reciept.get_submit_purchase_receipts',
+                    callback: function(response) {
+                        // console.log(response);
+                        // Handle the response here
+                    }
+                });
+               
+                
+            },
+            __("Download Data")
+        );
+        
         frm.add_custom_button(
             __("Stock Transfer"),
             function () {

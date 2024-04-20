@@ -60,7 +60,7 @@ def get_submit_stock_transfer(doc=None):
             patch_url = f"https://erp.metrogroupng.com/api/resource/Stock Entry/{name}"
             patch_data = {"custom_post": 0,"custom_voucher_no": transfer.name}
             requests.put(patch_url, headers=headers, json=patch_data)
-            frappe.log_error(f"STOCK TRANSFER '{name}' posted successfully.")
+            # frappe.log_error(f"STOCK TRANSFER '{name}' posted successfully.")
 
     except Exception as e:
         frappe.msgprint(f"Failed to fetch or process data: {e}")
@@ -71,7 +71,7 @@ def check_internet_purchase_receipt():
         requests.get("http://www.google.com", timeout=5)
         frappe.db.set_value("System Settings", None, "custom_internet_available", 1)
         frappe.db.commit()
-        frappe.log_error(f"STOCK TRANSFER Internet Available.")
+        # frappe.log_error(f"STOCK TRANSFER Internet Available.")
         # Internet connection is available, so we can attempt to post saved documents
         get_submit_stock_transfer()
     except requests.RequestException:
