@@ -8,10 +8,16 @@ frappe.ui.form.on('Offline Sync', {
                     callback: function(r) {
                         // console.log(r);
                         if (r.message !== null) {
-                            frappe.msgprint(__("Customer Count: {0}, Item Price Count: {1}", [r.message.customers_count, r.message.items_count]));
-                            // console.log(r.message);
+                            var message = __("Customer Count: {0}, Item Price Count: {1}, Item Count: {2}, stock transfer Count: {3}");
+                            var counts = [
+                                r.message.customers_count,
+                                r.message.items_price_count,
+                                r.message.items_count,
+                                r.message.stock_transfer_count
+                            ];
+                            frappe.msgprint(__(message, counts));
                         } else {
-                            frappe.msgprint(__('No Unsynced Data for {0} Count:'));
+                            frappe.msgprint(__('No Unsynced Data available.'));
                         }
                     }
                 });
@@ -19,12 +25,27 @@ frappe.ui.form.on('Offline Sync', {
             __("Download Data")
         );
         
-
+        
         frm.add_custom_button(
             __("Customer"),
             function () {
                 frappe.call({
                     method: 'offline_posting.custom_api.customers.get_updates_customer',
+                    callback: function(response) {
+                        // console.log(response);
+                        // Handle the response here
+                    }
+                });
+               
+                
+            },
+            __("Download Data")
+        );
+        frm.add_custom_button(
+            __("Item"),
+            function () {
+                frappe.call({
+                    method: 'offline_posting.custom_api.item_creation.get_updates_item',
                     callback: function(response) {
                         // console.log(response);
                         // Handle the response here
@@ -52,10 +73,10 @@ frappe.ui.form.on('Offline Sync', {
             __("Download Data")
         );
         frm.add_custom_button(
-            __("Purchase Reciept"),
+            __("Stock Transfer"),
             function () {
                 frappe.call({
-                    method: 'offline_posting.custom_api.purchase_reciept.post_saved_documents',
+                    method: 'offline_posting.custom_api.sales_invoice.get_submit_stock_transfer',
                     callback: function(response) {
                          console.log(response);
                         // Handle the response here
