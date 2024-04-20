@@ -8,7 +8,7 @@ from offline_posting.utils import get_api_keys
 def get_submit_purchase_receipts():
     try:
         api_key, secret_key = get_api_keys()
-        url = "https://erp.metrogroupng.com/api/resource/Purchase%20Receipt?filters={%22docstatus%22:1,%22custom_post%22:1}&fields=[%22name%22,%22supplier%22,%22posting_date%22,%22company%22,%22items.item_code%22,%22items.qty%22,%22items.rate%22]"
+        url = "https://erp.metrogroupng.com/api/resource/Purchase%20Receipt?filters={%22docstatus%22:1,%22custom_post%22:1}&fields=[%22name%22,%22supplier%22,%22posting_date%22,%22company%22,%22set_warehouse%22,%22items.item_code%22,%22items.qty%22,%22items.rate%22]"
         headers = {
             "Content-Type": "application/json",
             "Authorization": f"token {api_key}:{secret_key}"
@@ -30,7 +30,8 @@ def get_submit_purchase_receipts():
                     'rate': receipt_data.get('rate', 0),
                     'supplier': receipt_data.get('supplier'),
                     'company': receipt_data.get('company'),
-                    'posting_date': receipt_data.get('posting_date')
+                    'posting_date': receipt_data.get('posting_date'),
+                    'set_warehouse': receipt_data.get('set_warehouse')
                 })
 
         for name, items in items_by_name.items():
@@ -38,6 +39,7 @@ def get_submit_purchase_receipts():
             receipt.supplier = items[0]['supplier']
             receipt.company = items[0]['company']
             receipt.posting_date = items[0]['posting_date']
+            receipt.set_warehouse = items[0]['set_warehouse']
 
             for item in items:
                 receipt.append('items', {
