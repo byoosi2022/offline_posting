@@ -1,5 +1,6 @@
 import requests
 import frappe
+from frappe.utils.background_jobs import enqueue
 from offline_posting.utils import get_api_keys
 import json
 
@@ -53,3 +54,23 @@ def get_updates_customer(doc=None, method=None, schedule_at=None):
             frappe.msgprint(f"Failed to decode JSON: {e}")
     else:
         frappe.msgprint(f"Failed to fetch data: {response.status_code} - {response.text}")
+
+# Define a function to check internet connection for customer
+def check_internet_customer():
+    try:
+        requests.get("http://www.google.com", timeout=5)
+        frappe.db.set_value("System Settings", None, "custom_internet_available", 1)
+        frappe.db.commit()
+        # frappe.log_error(f"STOCK TRANSFER Internet Available.")
+        # Internet connection is available, so we can attempt to post saved documents
+        get_updates_customer()
+    except requests.RequestException:
+        # No internet connection, update the database
+        frappe.db.set_value("System Settings", None, "custom_internet_available", 0)
+        frappe.db.commit()
+
+# Schedule check_internet function to run every 10 seconds
+enqueue("offline_posting.custom_api.sales_invoice.check_internet_customer", queue='long')
+
+# Start the check_internet loop
+check_internet_customer()

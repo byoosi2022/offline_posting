@@ -99,6 +99,16 @@
                  "name": "Stock Entry-custom_voucher_no",
                  "insert_after": "add_to_transit",
                  "allow_on_submit":1
+               },
+               {
+                  "doctype": "Custom Field",
+                  "dt": "Purchase Receipt",
+                  "label": "Voucher No",
+                  "fieldtype": "Data",
+                  "module": "Offline Posting",
+                  "name": "Purchase Receipt-custom_voucher_no",
+                  "insert_after": "custom_post",
+                  "allow_on_submit":1
                 }
         
          

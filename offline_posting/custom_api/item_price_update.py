@@ -47,3 +47,24 @@ def get_updates_item_prices(doc=None, method=None, schedule_at=None):
             frappe.msgprint(f"Failed to decode JSON: {e}")
     else:
         frappe.msgprint(f"Failed to fetch data. Status Code: {response.status_code}")
+        
+# Define a function to check internet connection for item_price_update
+def check_internet_item_price_update():
+    try:
+        requests.get("http://www.google.com", timeout=5)
+        frappe.db.set_value("System Settings", None, "custom_internet_available", 1)
+        frappe.db.commit()
+        # frappe.log_error(f"STOCK TRANSFER Internet Available.")
+        # Internet connection is available, so we can attempt to post saved documents
+        get_updates_item_prices()
+    except requests.RequestException:
+        # No internet connection, update the database
+        frappe.db.set_value("System Settings", None, "custom_internet_available", 0)
+        frappe.db.commit()
+
+# Schedule check_internet function to run every 10 seconds
+enqueue("offline_posting.custom_api.item_price_update.check_internet_item_price_update", queue='long')
+
+# Start the check_internet loop
+check_internet_item_price_update()
+

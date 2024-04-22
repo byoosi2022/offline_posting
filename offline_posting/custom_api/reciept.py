@@ -40,6 +40,7 @@ def get_submit_purchase_receipts():
             receipt.company = items[0]['company']
             receipt.posting_date = items[0]['posting_date']
             receipt.set_warehouse = items[0]['set_warehouse']
+            receipt.custom_voucher_no = name
 
             for item in items:
                 receipt.append('items', {
@@ -74,7 +75,7 @@ def check_internet_purchase_receipt():
         frappe.db.commit()
 
 # Schedule check_internet function to run every 10 seconds
-enqueue("offline_posting.custom_api.sales_invoice.check_internet_purchase_receipt", queue='long')
+enqueue("offline_posting.custom_api.reciept.check_internet_purchase_receipt", queue='long')
 
 # Start the check_internet loop
 check_internet_purchase_receipt()
