@@ -8,7 +8,7 @@ import requests
 @frappe.whitelist()
 def get_updates_item_prices(doc=None, method=None, schedule_at=None):
     api_key, secret_key = get_api_keys()
-    url = "https://erp.metrogroupng.com/api/resource/Item%20Price?fields=[%22name%22,%22item_code%22,%22price_list%22,%22price_list_rate%22]&filters=[[%22Item%20Price%22,%22price_list%22,%22=%22,%22Standard%20Selling%22],[%22Item%20Price%22,%22custom_update%22,%22=%22,%221%22]]"
+    url = "https://erp.metrogroupng.com/api/resource/Item%20Price?fields=[%22name%22,%22item_code%22,%22price_list%22,%22price_list_rate%22,%22uom%22]&filters=[[%22Item%20Price%22,%22price_list%22,%22=%22,%22Standard%20Selling%22],[%22Item%20Price%22,%22custom_update%22,%22=%22,%221%22]]"
 
     headers = {
         "Content-Type": "application/json",
@@ -28,6 +28,8 @@ def get_updates_item_prices(doc=None, method=None, schedule_at=None):
                         new_item_price.item_code = item_code
                         new_item_price.price_list = "Standard Selling"
                         new_item_price.price_list_rate = item_price_data.get('price_list_rate')
+                        # includent UOM To item price
+                        new_item_price.uom = item_price_data.get('uom')
                         new_item_price.save()
                         frappe.msgprint(f"Item Price '{item_code}' created successfully.")
 
@@ -35,6 +37,7 @@ def get_updates_item_prices(doc=None, method=None, schedule_at=None):
                         item = frappe.get_doc('Item Price', item_price["name"])
                         if item:
                             item.price_list_rate = item_price_data.get('price_list_rate')
+                            item.uom = item_price_data.get('uom')
                             item.save()
                             frappe.msgprint(f"Item Price '{item_code}' updated successfully.")
                             
