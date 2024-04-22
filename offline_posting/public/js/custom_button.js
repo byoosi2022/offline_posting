@@ -14,6 +14,7 @@ frappe.ui.form.on('Offline Sync', {
                                     <strong>Item Count:</strong> ${r.message.items_count}<br>
                                     <strong>Stock Transfer Count:</strong> ${r.message.stock_transfer_count}<br>
                                     <strong>Receipt Count:</strong> ${r.message.reciept_count}<br>
+                                    <strong>User Count:</strong> ${r.message.user_count}<br>
                                 </div>`;
                             frappe.msgprint(message);
                         } else {
@@ -45,6 +46,22 @@ frappe.ui.form.on('Offline Sync', {
             function () {
                 frappe.call({
                     method: 'offline_posting.custom_api.item_creation.get_updates_item',
+                    callback: function(response) {
+                        // console.log(response);
+                        // Handle the response here
+                    }
+                });
+               
+                
+            },
+            __("Download Data")
+        );
+
+        frm.add_custom_button(
+            __("User"),
+            function () {
+                frappe.call({
+                    method: 'offline_posting.custom_api.user.get_updates_user',
                     callback: function(response) {
                         // console.log(response);
                         // Handle the response here
@@ -132,7 +149,7 @@ frappe.ui.form.on('Offline Sync', {
             __("Sync Invoice"),
             function () {
                 frappe.call({
-                    method: 'offline_posting.custom_api.sales_invoice.post_saved_documents',
+                    method: 'offline_posting.custom_api.purchase_reciept.post_saved_documents',
                     callback: function(response) {
                         // console.log(response);
                         // Handle the response here
