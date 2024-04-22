@@ -66,9 +66,8 @@
              "module": "Offline Posting",
              "name": "custom_main_content",
              "insert_after": "discount_amount",
-             "allow_on_submit":1,
-             "unique": 1
-         
+             "allow_on_submit":1
+                  
             },
  
             {
@@ -99,8 +98,8 @@
                "module": "Offline Posting",
                "name": "Stock Entry-custom_voucher_no",
                "insert_after": "add_to_transit",
-               "allow_on_submit":1,
-               "unique": 1
+               "allow_on_submit":1
+             
             },
             {
                "doctype": "Custom Field",
@@ -110,8 +109,8 @@
                "module": "Offline Posting",
                "name": "Purchase Receipt-custom_voucher_no",
                "insert_after": "custom_post",
-               "allow_on_submit": 1,
-               "unique": 1
+               "allow_on_submit": 1
+             
             }
               
         
