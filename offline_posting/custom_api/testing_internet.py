@@ -11,3 +11,6 @@ def check_internet():
         frappe.db.set_value("System Settings", None, "custom_internet_available", 0)
         frappe.db.commit()
         frappe.log_error("No internet connection")
+        
+        
+# //"encryption_key": "peQxwpZ4oiRsTfdv2U7qSrxXCWGhHEJGKNbijF2LoNo=",
