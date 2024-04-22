@@ -23,6 +23,14 @@ def get_updates_item_prices(doc=None, method=None, schedule_at=None):
                 item_code = item_price_data.get('item_code')
                 if item_code:
                     item_prices = frappe.get_all("Item Price", filters={"item_code": item_code, "price_list": "Standard Selling"})
+                    if not item_prices:  # Create item price if it doesn't exist
+                        new_item_price = frappe.new_doc("Item Price")
+                        new_item_price.item_code = item_code
+                        new_item_price.price_list = "Standard Selling"
+                        new_item_price.price_list_rate = item_price_data.get('price_list_rate')
+                        new_item_price.save()
+                        frappe.msgprint(f"Item Price '{item_code}' created successfully.")
+
                     for item_price in item_prices:
                         item = frappe.get_doc('Item Price', item_price["name"])
                         if item:
@@ -47,7 +55,7 @@ def get_updates_item_prices(doc=None, method=None, schedule_at=None):
             frappe.msgprint(f"Failed to decode JSON: {e}")
     else:
         frappe.msgprint(f"Failed to fetch data. Status Code: {response.status_code}")
-        
+
 # Define a function to check internet connection for item_price_update
 def check_internet_item_price_update():
     try:
@@ -67,4 +75,3 @@ enqueue("offline_posting.custom_api.item_price_update.check_internet_item_price_
 
 # Start the check_internet loop
 check_internet_item_price_update()
-
