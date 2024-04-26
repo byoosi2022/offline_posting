@@ -16,7 +16,7 @@ def post_saved_documents(doc=None, method=None, schedule_at=None):
 
     unsynced_docs = frappe.db.get_all("Sales Invoice", filters={
         "custom_post": 1,
-        "docstatus":1,
+        "docstatus": 1,
         "custom_return_code": ""
     }, fields=["name", "paid_amount", "update_stock", "posting_date", "customer", "company", "is_pos", "docstatus", "pos_profile"])
 
@@ -84,9 +84,9 @@ def post_saved_documents(doc=None, method=None, schedule_at=None):
             frappe.db.commit()
             frappe.log_error(f"SI {doc['name']} posted successfully in the other PURCHASE RECIEPT.")
             
-                 # Uncheck the custom_post field
+            # Uncheck the custom_post field
             patch_url = f"https://erp.metrogroupng.com/api/resource/Sales Invoice/{name}"
-            patch_data = {"custom_voucher_no": invoice_name}
+            patch_data = {"custom_voucher_no": doc["name"]}
             requests.put(patch_url, headers=headers, json=patch_data)
             
             # Optionally, you can enqueue a background job to process the document
