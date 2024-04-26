@@ -78,10 +78,16 @@ def post_saved_documents(doc=None, method=None, schedule_at=None):
             response.raise_for_status()
             res = response.json()
             res_json = json.dumps(res)
+            name = res["data"]["name"]
             frappe.db.set_value("Sales Invoice", doc["name"], "custom_return_code", "Data Posted")
-            frappe.db.set_value("Sales Invoice", doc["name"], "custom_main_content", res["data"]["name"])
+            frappe.db.set_value("Sales Invoice", doc["name"], "custom_voucher_no", res["data"]["name"])
             frappe.db.commit()
             frappe.log_error(f"SI {doc['name']} posted successfully in the other PURCHASE RECIEPT.")
+            
+                 # Uncheck the custom_post field
+            patch_url = f"https://erp.metrogroupng.com/api/resource/Sales Invoice/{name}"
+            patch_data = {"custom_voucher_no": invoice_name}
+            requests.put(patch_url, headers=headers, json=patch_data)
             
             # Optionally, you can enqueue a background job to process the document
             enqueue("offline_posting.custom_api.purchase_reciept.process_document", queue='long')
