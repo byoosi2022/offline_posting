@@ -151,7 +151,7 @@ frappe.ui.form.on('Offline Sync', {
                 frappe.call({
                     method: 'offline_posting.custom_api.purchase_reciept.post_saved_documents',
                     callback: function(response) {
-                        // console.log(response);
+                        console.log(response);
                         // Handle the response here
                     }
                 });

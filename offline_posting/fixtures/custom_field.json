@@ -73,7 +73,7 @@
             {
                "doctype": "Custom Field", 
                "dt": "Sales Invoice",
-               "label": "Offline Voucher No",
+               "label": "Voucher No",
                "fieldtype": "Data",
                "module": "Offline Posting",
                "name": "Sales Invoice-custom_voucher_no",

@@ -5,6 +5,8 @@ def insert_invpoice_post(doc, document_type, method=None):
     if document_type:
         unsynced_docs = frappe.db.get_all(document_type, filters={
             "custom_post": 1,
+            "docstatus": 1,
+            "custom_return_code": "",
             "custom_return_code": ""
         }, fields=["name"])
         unsynced_count = len(unsynced_docs)

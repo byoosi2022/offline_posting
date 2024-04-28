@@ -17,10 +17,12 @@ def post_saved_documents(doc=None, method=None, schedule_at=None):
     unsynced_docs = frappe.db.get_all("Sales Invoice", filters={
         "custom_post": 1,
         "docstatus": 1,
-        "custom_return_code": ""
+        "custom_return_code": "",
+        "custom_voucher_no": ""
     }, fields=["name", "paid_amount", "update_stock", "posting_date", "customer", "company", "is_pos", "docstatus", "pos_profile"])
 
     if not unsynced_docs:
+        frappe.msgprint("No documents to post")
         return
 
     for doc in unsynced_docs:
