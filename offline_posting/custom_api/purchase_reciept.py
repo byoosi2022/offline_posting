@@ -26,17 +26,14 @@ def post_saved_documents(doc=None, method=None, schedule_at=None):
         return
 
     for doc in unsynced_docs:
-        invoice_name = doc.get("name")
-
-        items = frappe.get_all("Sales Invoice Item", filters={"parent": invoice_name},
-                               fields=["item_code", "qty", "rate"])
-        payments = frappe.get_all("Sales Invoice Payment", filters={"parent": invoice_name},
-                                  fields=["amount", "mode_of_payment", "base_amount", "account"])
-
         try:
-            customer = doc.get("customer")
-            if not customer or not items:
-                raise ValueError("Customer or Items field is empty")
+            items = frappe.get_all("Sales Invoice Item", filters={"parent": doc["name"]},
+                                    fields=["item_code", "qty", "rate"])
+            payments = frappe.get_all("Sales Invoice Payment", filters={"parent": doc["name"]},
+                                    fields=["amount", "mode_of_payment", "base_amount", "account"])
+
+            if not items or not payments:
+                raise ValueError("Items or Payments field is empty")
 
             item_list = []
             for item in items:
@@ -52,19 +49,18 @@ def post_saved_documents(doc=None, method=None, schedule_at=None):
                 payment_data = {
                     "amount": payment.get("amount"),
                     "mode_of_payment": payment.get("mode_of_payment"),
-                    "base_amount": payment.get("amount"),
+                    "base_amount": payment.get("base_amount"),
                     "account": payment.get("account")
                 }
                 payment_list.append(payment_data)
 
-            # Calculate outstanding amount
             total_amount = sum(item.get("rate") * item.get("qty") for item in items)
             paid_amount = doc.get("paid_amount", 0.00)
             outstanding_amount = max(total_amount - paid_amount, 0.00)
 
             data = {
                 "data": {
-                    "customer": customer,
+                    "customer": doc.get("customer"),
                     "pos_profile": doc.get("pos_profile"),
                     "paid_amount": doc.get("paid_amount"),
                     "update_stock": doc.get("update_stock"),
@@ -100,11 +96,14 @@ def post_saved_documents(doc=None, method=None, schedule_at=None):
             # Extract errors from the response, if available
             try:
                 errors = response.json().get("data", {}).get("errors")
-                frappe.log_error(f"Errors encountered: {errors}")
+                if errors:
+                    error_message = ", ".join(errors)
+                    frappe.msgprint(f"Failed to post item {doc['name']}: {error_message}")
             except KeyError:
                 pass  # No errors found in the response
 
             break
+
 
 # Define a function to check internet connection
 def check_internet():
