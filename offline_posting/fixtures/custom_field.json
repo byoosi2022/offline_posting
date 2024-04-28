@@ -73,7 +73,8 @@
       "fieldtype": "Float",
       "module": "Offline Posting",
       "name": "online_stock_balance",
-      "insert_after": "item_code"
+      "insert_after": "item_code",
+      "allow_on_submit": 1
    },
    {
       "doctype": "Custom Field",
