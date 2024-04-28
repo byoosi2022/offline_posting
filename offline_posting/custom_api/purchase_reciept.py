@@ -19,7 +19,7 @@ def post_saved_documents(doc=None, method=None, schedule_at=None):
         "docstatus": 1,
         "custom_return_code": "",
         "custom_voucher_no": ""
-    }, fields=["name", "paid_amount", "update_stock", "posting_date", "customer", "company", "is_pos", "docstatus", "pos_profile"])
+    }, fields=["name", "paid_amount", "update_stock", "posting_date","posting_time", "customer", "company", "is_pos", "docstatus", "pos_profile"])
 
     if not unsynced_docs:
         frappe.msgprint("No documents to post")
@@ -54,14 +54,12 @@ def post_saved_documents(doc=None, method=None, schedule_at=None):
                 }
                 payment_list.append(payment_data)
 
-            total_amount = sum(item.get("rate") * item.get("qty") for item in items)
-            paid_amount = doc.get("paid_amount", 0.00)
-            outstanding_amount = max(total_amount - paid_amount, 0.00)
-
+            posting_date_str = doc.get("posting_date").strftime("%Y-%m-%d")
             data = {
                 "data": {
                     "customer": doc.get("customer"),
                     "pos_profile": doc.get("pos_profile"),
+                    "posting_date":  posting_date_str,
                     "paid_amount": doc.get("paid_amount"),
                     "update_stock": doc.get("update_stock"),
                     "company": doc.get("company"),
@@ -71,6 +69,9 @@ def post_saved_documents(doc=None, method=None, schedule_at=None):
                     "payments": payment_list
                 }
             }
+            # Print the data before posting
+            frappe.msgprint(f"Data to be posted: {data}")
+            
             response = requests.post(url, json=data, headers=headers)
             
             response.raise_for_status()
@@ -84,7 +85,7 @@ def post_saved_documents(doc=None, method=None, schedule_at=None):
             
             # Uncheck the custom_post field
             patch_url = f"https://erp.metrogroupng.com/api/resource/Sales Invoice/{name}"
-            patch_data = {"custom_voucher_no": doc["name"]}
+            patch_data = {"custom_voucher_no": doc["name"],"posting_date":posting_date_str}
             requests.put(patch_url, headers=headers, json=patch_data)
             
             # Optionally, you can enqueue a background job to process the document
