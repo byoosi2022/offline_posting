@@ -10,8 +10,19 @@ app_license = "MIT"
 
 # include js, css files in header of desk.html
 # app_include_css = "/assets/offline_posting/css/offline_posting.css"
-# app_include_js = "/assets/offline_posting/js/offline_posting.js"
-app_include_js = "/assets/offline_posting/js/custom_button.js"
+# app_include_js = "/assets/offline_posting/js/offline_posting.js" 
+# Include JavaScript files in your app
+app_include_js = [
+    "/assets/offline_posting/js/custom_button.js",
+    "/assets/offline_posting/js/sales_invoice.js"
+]
+
+# Specify JavaScript files for specific DocTypes
+doctype_js = {
+    "Offline Sync": "public/js/custom_button.js",
+    "Another DocType": "public/js/another_doctype.js"
+}
+
 
 # include js, css files in header of web template
 # web_include_css = "/assets/offline_posting/css/offline_posting.css"
@@ -33,7 +44,10 @@ app_include_js = "/assets/offline_posting/js/custom_button.js"
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"} sites/assets/offline_posting/js/custom_button.js
 
-doctype_js = { "Offline Sync": "public/js/custom_button.js"}
+doctype_js = {
+    "Offline Sync": "public/js/custom_button.js",
+    "Another DocType": "public/js/another_doctype.js"
+}
 
 # Home Pages
 # ----------

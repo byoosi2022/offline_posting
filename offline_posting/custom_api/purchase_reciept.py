@@ -24,7 +24,7 @@ def post_saved_documents(doc=None, method=None, schedule_at=None):
     if not unsynced_docs:
         frappe.msgprint("No documents to post")
         return
-
+ 
     for doc in unsynced_docs:
         try:
             items = frappe.get_all("Sales Invoice Item", filters={"parent": doc["name"]},
