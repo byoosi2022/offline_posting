@@ -1,6 +1,6 @@
-import frappe # type: ignore
-from frappe.utils.background_jobs import enqueue
 import requests
+import frappe # type: ignore
+from frappe.utils.background_jobs import enqueue 
 import json
 from offline_posting.utils import get_api_keys
 from offline_posting.custom_post.server_post import local_server
@@ -12,7 +12,7 @@ def get_updates_item(doc=None, method=None, schedule_at=None):
     for server, value in response_server.items():
         if value == 1:
             filters_item = f'[["Item","{server}","=","1"]]'
-            fields = '%5B%22name%22%2C%22item_name%22%2C%22item_group%22%2C%22item_code%22%2C%22custom_company%22%2C%22stock_uom%22%2C%22is_stock_item%5D'
+            fields = '%5B%22name%22%2C%22item_name%22%2C%22item_group%22%2C%22item_code%22%2C%22custom_company%22%2C%22stock_uom%22%2C%22is_stock_item%22%5D'
             url = f"https://erp.metrogroupng.com/api/resource/Item?fields={fields}&filters={filters_item}"
 
             headers = {
@@ -26,7 +26,7 @@ def get_updates_item(doc=None, method=None, schedule_at=None):
                 try:
                     res = response.json()
                     for item_data in res.get('data', []):
-                        update_or_create_item(item_data, server)
+                            update_or_create_item(item_data, server)
                 except json.decoder.JSONDecodeError as e:
                     frappe.msgprint(f"Failed to decode JSON: {e}")
             else:
@@ -79,23 +79,20 @@ def uncheck_custom_update(item_code, server):
     else:
         frappe.msgprint(f"Failed to uncheck custom update field for '{item_code}'. Status Code: {patch_response.status_code}")
 
-# Define a function to check internet connection for user
-def check_internet_item_creation():
+def check_internet_item():
     try:
         requests.get("http://www.google.com", timeout=5)
         frappe.db.set_value("System Settings", None, "custom_internet_available", 1)
         frappe.db.commit()
-        # Internet connection is available, so we can attempt to post saved documents
-        frappe.log_error(f"Internet Available Item ")
+        frappe.log_error(f"Internet Available from Remote From ITEM ")
         get_updates_item()
+        
     except requests.RequestException:
-        # No internet connection, update the database
         frappe.db.set_value("System Settings", None, "custom_internet_available", 0)
         frappe.db.commit()
-        frappe.log_error(f"No Internet Available Item")
-
+        frappe.log_error(f"No Internet Available Remote From ITEM")
+        
 # Schedule check_internet function to run every 10 seconds
-enqueue("offline_posting.custom_api.item_creation.check_internet_item_creation", queue='long')
-
-# Start the check_internet loop
-check_internet_item_creation()
+enqueue("offline_posting.custom_api.item_creation.check_internet_item", queue='long')
+# Assuming this code is running in a background job, so we don't need to enqueue it
+check_internet_item()
