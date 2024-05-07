@@ -1,6 +1,6 @@
 import requests
-import frappe
-from frappe.utils.background_jobs import enqueue
+import frappe # type: ignore
+from frappe.utils.background_jobs import enqueue # type: ignore
 from offline_posting.utils import get_api_keys
 from datetime import timedelta
 import json

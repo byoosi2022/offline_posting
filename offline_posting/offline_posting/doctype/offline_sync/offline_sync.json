@@ -13,7 +13,12 @@
   "column_break_hjjf5",
   "company",
   "document_type",
-  "amended_from"
+  "amended_from",
+  "server_setings_section",
+  "custom_local_server_1",
+  "column_break_p5wgd",
+  "custom_local_server_2",
+  "custom_local_server_3"
  ],
  "fields": [
   {
@@ -61,11 +66,38 @@
    "print_hide": 1,
    "read_only": 1,
    "search_index": 1
+  },
+  {
+   "fieldname": "server_setings_section",
+   "fieldtype": "Section Break",
+   "label": "Server Setings"
+  },
+  {
+   "fieldname": "column_break_p5wgd",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "custom_local_server_1",
+   "fieldtype": "Check",
+   "label": "Local Server 1"
+  },
+  {
+   "default": "0",
+   "fieldname": "custom_local_server_2",
+   "fieldtype": "Check",
+   "label": "Local Server 2"
+  },
+  {
+   "default": "0",
+   "fieldname": "custom_local_server_3",
+   "fieldtype": "Check",
+   "label": "Local Server 3"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-04-13 11:53:34.718523",
+ "modified": "2024-05-07 14:48:43.750753",
  "modified_by": "Administrator",
  "module": "Offline Posting",
  "name": "Offline Sync",

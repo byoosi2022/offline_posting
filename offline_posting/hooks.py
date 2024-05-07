@@ -14,14 +14,11 @@ app_license = "MIT"
 # Include JavaScript files in your app
 app_include_js = [
     "/assets/offline_posting/js/custom_button.js",
-    "/assets/offline_posting/js/sales_invoice.js"
+    "/assets/offline_posting/js/sales_invoice.js",
+    "/assets/offline_posting/js/supplier.js",
+    "/assets/offline_posting/js/customer.js",
+    
 ]
-
-# Specify JavaScript files for specific DocTypes
-doctype_js = {
-    "Offline Sync": "public/js/custom_button.js",
-    "Another DocType": "public/js/another_doctype.js"
-}
 
 
 # include js, css files in header of web template
@@ -46,7 +43,8 @@ doctype_js = {
 
 doctype_js = {
     "Offline Sync": "public/js/custom_button.js",
-    "Another DocType": "public/js/another_doctype.js"
+    "Supplier": "public/js/supplier.js",
+    "Customer": "public/js/customer.js"
 }
 
 # Home Pages
@@ -133,33 +131,33 @@ doctype_js = {
 # ---------------
 # Hook on document methods and events
 
-# doc_events = {
-# 	# "*": {
-# 		# "on_update": "method",
-# 	# 	"on_cancel": "method",
-# 	# 	"on_trash": "method"
-# 	# }
+doc_events = {
+	# "*": {
+		# "on_update": "method",
+	# 	"on_cancel": "method",
+	# 	"on_trash": "method"
+	# }
  
-#    "Offline Sync": {
-#         "on_update": "offline_posting.custom_api.customers.get_updates_customer"
+   "Lead": {
+        "before_save": "offline_posting.custom_post.access_server.access_server"
+    },
+   
+#      "Item": {
+#         "on_update": "offline_posting.custom_api.offline_sync.insert_item_post"
 #     },
    
-# #      "Item": {
-# #         "on_update": "offline_posting.custom_api.offline_sync.insert_item_post"
-# #     },
-   
-# #    "Offline Sync": {
-# #         "on_update": "offline_posting.custom_api.sales_invoice.post_saved_documents",
-# #         # "on_update": "offline_posting.api.post_item"
-# #     },
+#    "Offline Sync": {
+#         "on_update": "offline_posting.custom_api.sales_invoice.post_saved_documents",
+#         # "on_update": "offline_posting.api.post_item"
+#     },
    
 
-# #     "Customer": {
-# #         "on_update": "offline_posting.custom_api.customers.get_updates_customer"
-# #     },
+#     "Customer": {
+#         "on_update": "offline_posting.custom_api.customers.get_updates_customer"
+#     },
     
   
-# }
+}
 
 # Scheduled Tasks
 # ---------------

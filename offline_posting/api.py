@@ -77,3 +77,19 @@ enqueue("offline_posting.custom_api.purchase_receipt_creation.check_internet_pur
 
 # Start the check_internet loop
 check_internet_purchase_receipt()
+
+import frappe
+import json
+
+@frappe.whitelist()
+def get_all_customers():
+    try:
+        customers = frappe.db.get_all("Customer", fields=["name", "customer_name", "customer_type", "customer_group", "territory"])
+        return customers
+    except Exception as e:
+        frappe.log_error(f"Failed to fetch customers: {e}")
+        return frappe.utils.response.report_error("Failed to fetch customers")
+
+
+
+

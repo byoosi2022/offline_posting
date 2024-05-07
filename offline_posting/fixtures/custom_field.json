@@ -72,7 +72,7 @@
       "label": "Online Stock Balance",
       "fieldtype": "Float",
       "module": "Offline Posting",
-      "name": "online_stock_balance",
+      "name": "Sales Invoice Item-custom_online_stock_balance",
       "insert_after": "item_code",
       "allow_on_submit": 1
    },
@@ -93,8 +93,18 @@
       "module": "Offline Posting",
       "fieldtype": "Check",
       "name": "Customer-custom_post",
-      "insert_after": "custom_company",
-      "allow_on_submit": 1
+      "insert_after": "custom_company"
+ 
+   },
+   {
+      "doctype": "Custom Field",
+      "dt": "Supplier",
+      "label": "Post",
+      "module": "Offline Posting",
+      "fieldtype": "Check",
+      "name": "Supplier-custom_post",
+      "insert_after": "custom_company"
+  
    },
    {
       "doctype": "Custom Field",
