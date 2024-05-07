@@ -84,14 +84,13 @@ def check_internet_item():
         requests.get("http://www.google.com", timeout=5)
         frappe.db.set_value("System Settings", None, "custom_internet_available", 1)
         frappe.db.commit()
-        frappe.log_error(f"Internet Available from Remote From ITEM ")
+        # frappe.log_error(f"Internet Available from Remote From ITEM ")
         get_updates_item()
         
     except requests.RequestException:
         frappe.db.set_value("System Settings", None, "custom_internet_available", 0)
         frappe.db.commit()
-        frappe.log_error(f"No Internet Available Remote From ITEM")
-        
+         
 # Schedule check_internet function to run every 10 seconds
 enqueue("offline_posting.custom_api.item_creation.check_internet_item", queue='long')
 # Assuming this code is running in a background job, so we don't need to enqueue it
