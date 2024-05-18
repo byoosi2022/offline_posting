@@ -32,7 +32,7 @@
       "label": "Post",
       "module": "Offline Posting",
       "fieldtype": "Check",
-      "name": "Sales Invoice-post_name",
+      "name": "Sales Invoice-custom_post",
       "insert_after": "customer",
       "allow_on_submit": 1,
       "default": 1
