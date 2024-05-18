@@ -28,15 +28,6 @@
    },
    {
       "doctype": "Custom Field",
-      "dt": "User",
-      "label": "Password",
-      "fieldtype": "Data",
-      "module": "Offline Posting",
-      "name": "password",
-      "insert_after": "api_key"
-   },
-   {
-      "doctype": "Custom Field",
       "dt": "Sales Invoice",
       "label": "Post",
       "module": "Offline Posting",
