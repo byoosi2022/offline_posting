@@ -5,7 +5,7 @@
       "label": "Post",
       "module": "Offline Posting",
       "fieldtype": "Check",
-      "name": "Item-post_name",
+      "name": "Item-custom_post",
       "insert_after": "item_name"
    },
    {
@@ -41,7 +41,7 @@
       "label": "Post",
       "module": "Offline Posting",
       "fieldtype": "Check",
-      "name": "post_name",
+      "name": "Sales Invoice-post_name",
       "insert_after": "customer",
       "allow_on_submit": 1,
       "default": 1
@@ -52,7 +52,7 @@
       "label": "Return Code",
       "fieldtype": "Data",
       "module": "Offline Posting",
-      "name": "custom_return_code",
+      "name": "Sales Invoice-custom_return_code",
       "insert_after": "customer",
       "allow_on_submit": 1
    },
@@ -62,7 +62,7 @@
       "label": "Main Content",
       "fieldtype": "Long Text",
       "module": "Offline Posting",
-      "name": "custom_main_content",
+      "name": "Sales Invoice-custom_main_content",
       "insert_after": "discount_amount",
       "allow_on_submit": 1
    },
@@ -82,7 +82,7 @@
       "label": "Voucher No",
       "fieldtype": "Data",
       "module": "Offline Posting",
-      "name": "custom_voucher_no",
+      "name": "Sales Invoice-custom_voucher_no",
       "insert_after": "custom_return_code",
       "allow_on_submit": 1
    },
@@ -133,7 +133,7 @@
       "fieldtype": "Data",
       "module": "Offline Posting",
       "name": "Purchase Receipt-custom_voucher_no",
-      "insert_after": "custom_post",
+      "insert_after": "Purchase Receipt-custom_post",
       "allow_on_submit": 1
    }
 ]

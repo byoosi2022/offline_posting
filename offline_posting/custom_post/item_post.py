@@ -97,12 +97,12 @@ def check_internet_item():
         requests.get("http://www.google.com", timeout=5)
         frappe.db.set_value("System Settings", None, "custom_internet_available", 1)
         frappe.db.commit()
-        frappe.log_error(f"Internet Availabe")
+        # frappe.log_error(f"Internet Availabe")
         # Internet connection is available, so we can attempt to post saved documents
         post_item()
     except requests.RequestException:
         # No internet connection, update the database
-        frappe.log_error(f"Not Internet Availabe")
+        # frappe.log_error(f"Not Internet Availabe")
         frappe.db.set_value("System Settings", None, "custom_internet_available", 0)
         frappe.db.commit()
 
