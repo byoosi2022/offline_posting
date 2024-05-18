@@ -1,4 +1,3 @@
-
 import requests
 import frappe
 from collections import defaultdict
@@ -11,7 +10,7 @@ def get_submit_purchase_receipts():
     try:
         api_key, secret_key = get_api_keys()
         response_server = local_server()
-         # Check if response_server is available and update the corresponding field
+        # Check if response_server is available and update the corresponding field
         for server, value in response_server.items():
             if value == 1:
                 filters_receipt = f'[["Purchase Receipt","docstatus","=","1"],["Purchase Receipt","{server}","=","1"],["Purchase Receipt","custom_voucher_no","=",""]]'
@@ -56,18 +55,18 @@ def get_submit_purchase_receipts():
                             'rate': item['rate']
                         })
 
-                receipt.insert()
-                receipt.submit()
-                frappe.msgprint(f"Purchase Receipt '{name}' created and submitted successfully.")
+                    receipt.insert()
+                    receipt.submit()
+                    frappe.msgprint(f"Purchase Receipt '{name}' created and submitted successfully.")
 
-                # Uncheck the custom_post field
-                patch_url = f"https://erp.metrogroupng.com/api/resource/Purchase Receipt/{name}"
-                patch_data = {
-                    "custom_post": 0,
-                    "custom_voucher_no": receipt.name,
-                    f"{server}": 0}
-                
-                requests.put(patch_url, headers=headers, json=patch_data)
+                    # Uncheck the custom_post field
+                    patch_url = f"https://erp.metrogroupng.com/api/resource/Purchase%20Receipt/{name}"
+                    patch_data = {
+                        "custom_post": 0,
+                         f"{server}": 0
+                    }
+
+                    requests.put(patch_url, headers=headers, json=patch_data)
 
     except Exception as e:
         frappe.msgprint(f"Failed to fetch or process data: {e}")
@@ -79,13 +78,12 @@ def check_internet_purchase_receipt():
         frappe.db.set_value("System Settings", None, "custom_internet_available", 1)
         frappe.db.commit()
         # Internet connection is available, so we can attempt to post saved documents
-        # frappe.log_error(f"Internet Available from Remote From reciept ")
         get_submit_purchase_receipts()
     except requests.RequestException:
         # No internet connection, update the database
         frappe.db.set_value("System Settings", None, "custom_internet_available", 0)
         frappe.db.commit()
-        # frappe.log_error(f"No Internet Available from Remote From reciept ")
+
 # Schedule check_internet function to run every 10 seconds
 enqueue("offline_posting.custom_api.reciept.check_internet_purchase_receipt", queue='long')
 

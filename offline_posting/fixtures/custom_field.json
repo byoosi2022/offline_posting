@@ -5,7 +5,7 @@
       "label": "Post",
       "module": "Offline Posting",
       "fieldtype": "Check",
-      "name": "Item-custom_post",
+      "name": "Item-post_name",
       "insert_after": "item_name"
    },
    {
