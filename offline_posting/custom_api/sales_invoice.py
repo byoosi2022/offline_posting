@@ -66,7 +66,6 @@ def get_submit_stock_transfer(doc=None):
                 patch_url = f"https://erp.metrogroupng.com/api/resource/Stock Entry/{name}"
                 patch_data = {
                     "custom_post": 0,
-                    "custom_voucher_no": transfer.name,
                     f"{server}": 0
                      }
                 requests.put(patch_url, headers=headers, json=patch_data)
