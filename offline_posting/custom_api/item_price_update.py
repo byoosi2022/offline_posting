@@ -28,13 +28,22 @@ def get_updates_item_prices(doc=None, method=None, schedule_at=None):
                     for item_price_data in res.get('data', []):
                         item_code = item_price_data.get('item_code')
                         if item_code:
+                            # Check if item exists, if not, create it
+                            if not frappe.db.exists("Item", item_code):
+                                new_item = frappe.new_doc("Item")
+                                new_item.item_code = item_code
+                                new_item.item_name = item_code
+                                new_item.item_group = "All Item Groups"  # Modify this as necessary
+                                new_item.stock_uom = item_price_data.get('uom') or "Nos"  # Default to 'Nos' if UOM is not provided
+                                new_item.insert()
+                                frappe.msgprint(f"Item '{item_code}' created successfully.")
+
                             item_prices = frappe.get_all("Item Price", filters={"item_code": item_code, "price_list": "Standard Selling"})
                             if not item_prices:  # Create item price if it doesn't exist
                                 new_item_price = frappe.new_doc("Item Price")
                                 new_item_price.item_code = item_code
                                 new_item_price.price_list = "Standard Selling"
                                 new_item_price.price_list_rate = item_price_data.get('price_list_rate')
-                                # includent UOM To item price
                                 new_item_price.uom = item_price_data.get('uom')
                                 new_item_price.save()
                                 frappe.msgprint(f"Item Price '{item_code}' created successfully.")
