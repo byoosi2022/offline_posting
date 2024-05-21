@@ -17,7 +17,7 @@ def post_item(doc=None, method=None, schedule_at=None):
     local_items = frappe.db.get_list(
         "Item",
         filters={"custom_post": 1},
-        fields=["name", "item_name", "item_group", "item_code", "custom_company"]
+        fields=["name", "item_name", "item_group", "item_code", "custom_company","valuation_rate"]
     )
 
     url = "https://erp.metrogroupng.com/api/resource/Item"
@@ -43,7 +43,9 @@ def post_item(doc=None, method=None, schedule_at=None):
                 "item_name": local_item['item_name'],
                 "item_group": local_item['item_group'],
                 "item_code": local_item['item_code'],
-                "custom_company": local_item['custom_company']
+                "custom_company": local_item['custom_company'],
+                "valuation_rate": local_item['valuation_rate']
+               
             }
             # Check if response_server is available and update the corresponding field
             for server, value in response_server.items():
@@ -64,13 +66,14 @@ def post_item(doc=None, method=None, schedule_at=None):
 
         # Item exists remotely, check for changes
         remote_item = remote_items[0]
-        if any(local_item[field] != remote_item.get(field) for field in ["item_name", "item_group", "item_code", "custom_company"]):
+        if any(local_item[field] != remote_item.get(field) for field in ["item_name", "item_group", "item_code", "custom_company","valuation_rate"]):
             # Item has changes, update it
             patch_url = f"https://erp.metrogroupng.com/api/resource/Item/{item_code}"
             patch_data = {
                 "item_name": local_item['item_name'],
                 "item_group": local_item['item_group'],
                 "item_code": local_item['item_code'],
+                "valuation_rate": local_item['valuation_rate'],
                 "custom_company": local_item['custom_company']
             }
             # Check if response_server is available and update the corresponding field

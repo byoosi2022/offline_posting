@@ -12,7 +12,7 @@ def get_updates_item(doc=None, method=None, schedule_at=None):
     for server, value in response_server.items():
         if value == 1:
             filters_item = f'[["Item","{server}","=","1"]]'
-            fields = '%5B%22name%22%2C%22item_name%22%2C%22item_group%22%2C%22item_code%22%2C%22custom_company%22%2C%22stock_uom%22%2C%22is_stock_item%22%5D'
+            fields = '%5B%22name%22%2C%22item_name%22%2C%22item_group%22%2C%22item_code%22%2C%22custom_company%22%2C%22stock_uom%22%2C%22is_stock_item%22%2C%22valuation_rate%22%5D'
             url = f"https://erp.metrogroupng.com/api/resource/Item?fields={fields}&filters={filters_item}"
 
             headers = {
@@ -61,6 +61,7 @@ def set_item_data(item, item_data):
     item.item_code = item_data.get('item_code', '')
     item.item_group = item_data.get('item_group', '')
     item.custom_company = item_data.get('custom_company', '')
+    item.valuation_rate = item_data.get('valuation_rate', 2000)
 
 def uncheck_custom_update(item_code, server):
     api_key, secret_key = get_api_keys()
