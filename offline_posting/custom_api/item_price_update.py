@@ -16,7 +16,7 @@ def get_updates_item_prices(doc=None, method=None, schedule_at=None):
     for server, value in response_server.items():
         if value == 1:
             filters_item_prices = f'[["Item Price","price_list","=","Standard Selling"],["Item Price","{server}","=","1"]]'
-            url = f"https://erp.metrogroupng.com/api/resource/Item%20Price?fields=[%22name%22,%22item_code%22,%22price_list%22,%22price_list_rate%22,%22uom%22,%22valuation_rate%22]&filters={filters_item_prices}"
+            url = f"https://erp.metrogroupng.com/api/resource/Item%20Price?fields=[%22name%22,%22item_code%22,%22price_list%22,%22price_list_rate%22,%22uom%22]&filters={filters_item_prices}"
 
             headers = {
                 "Content-Type": "application/json",
@@ -37,7 +37,7 @@ def get_updates_item_prices(doc=None, method=None, schedule_at=None):
                                 new_item.item_name = item_code
                                 new_item.item_group = "All Item Groups"  # Modify this as necessary
                                 new_item.stock_uom = item_price_data.get('uom') or "Nos"  # Default to 'Nos' if UOM is not provided
-                                new_item.valuation_rate = item_price_data.get('valuation_rate', 2000)  # Assign default valuation_rate here
+                                new_item.valuation_rate = 2000  # Assign default valuation_rate here
                                 new_item.insert()
                                 frappe.msgprint(f"Item '{item_code}' created successfully.")
 
