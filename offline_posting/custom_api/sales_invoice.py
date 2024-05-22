@@ -50,7 +50,7 @@ def get_submit_stock_transfer(doc=None):
                     transfer.custom_voucher_no = name
                     transfer.company = items[0]['company']
                     transfer.posting_date = items[0]['posting_date']
-
+                    
                     for item in items:
                         item_code = item['item_code']
                         if not frappe.db.exists('Item', item_code):

@@ -13,12 +13,13 @@ def post_saved_documents(doc=None, method=None, schedule_at=None):
         "Content-Type": "application/json",
         "Authorization": f"token {api_key}:{secret_key}"
     }
-
+    current_user = frappe.session.user
     unsynced_docs = frappe.db.get_all("Sales Invoice", filters={
         "custom_post": 1,
         "docstatus": 1,
         "custom_return_code": "",
-        "custom_voucher_no": ""
+        "custom_voucher_no": "",
+        "owner": current_user  # Ensure only documents owned by the current user
     }, fields=["name", "paid_amount", "update_stock", "posting_date","posting_time", "customer", "company", "is_pos", "docstatus", "pos_profile"])
 
     if not unsynced_docs:
@@ -70,7 +71,7 @@ def post_saved_documents(doc=None, method=None, schedule_at=None):
                 }
             }
             # Print the data before posting
-            frappe.msgprint(f"Data to be posted: {data}")
+            # frappe.msgprint(f"Data to be posted: {data}")
             
             response = requests.post(url, json=data, headers=headers)
             
