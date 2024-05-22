@@ -11,7 +11,7 @@ def get_submit_stock_transfer(doc=None):
     try:
         api_key, secret_key = get_api_keys()
         response_server = local_server()
-         # Check if response_server is available and update the corresponding field
+        # Check if response_server is available and update the corresponding field
         for server, value in response_server.items():
             if value == 1:
                 filters_stock_transfer = f'[["Stock Entry","{server}","=","1"],["Stock Entry","stock_entry_type","=","Material Transfer"],["Stock Entry","docstatus","=","1"],["Stock Entry","custom_voucher_no","=",""]]'
@@ -24,8 +24,7 @@ def get_submit_stock_transfer(doc=None):
                 response = requests.get(url, headers=headers)
                 response.raise_for_status()
                 data = response.json().get('data', [])
-                frappe.msgprint(str(data))
-                # Initialize a dictionary to store items by name
+
                 items_by_name = defaultdict(list)
 
                 for transfer_data in data:
@@ -39,8 +38,8 @@ def get_submit_stock_transfer(doc=None):
                             'to_warehouse': transfer_data.get('to_warehouse'),
                             'company': transfer_data.get('company'),
                             'posting_date': transfer_data.get('posting_date'),
-                            's_warehouse': transfer_data.get('s_warehouse', ''),  # Default value if key is missing
-                            't_warehouse': transfer_data.get('t_warehouse', ''),  # Default value if key is missing
+                            's_warehouse': transfer_data.get('s_warehouse', ''),
+                            't_warehouse': transfer_data.get('t_warehouse', ''),
                             'cost_center': transfer_data.get('cost_center'),
                         })
 
@@ -49,33 +48,45 @@ def get_submit_stock_transfer(doc=None):
                     transfer.purpose = "Material Transfer"
                     transfer.stock_entry_type = "Material Transfer"
                     transfer.custom_voucher_no = name
-                    # transfer.from_warehouse = items[0]['from_warehouse']
                     transfer.company = items[0]['company']
-                    # transfer.to_warehouse = items[0]['to_warehouse']
                     transfer.posting_date = items[0]['posting_date']
 
                     for item in items:
+                        item_code = item['item_code']
+                        if not frappe.db.exists('Item', item_code):
+                            new_item = frappe.new_doc('Item')
+                            new_item.item_code = item_code
+                            new_item.item_group = 'All Item Groups'
+                            new_item.custom_company = transfer_data.get('company')
+                            new_item.valuation_rate = 2000
+                            new_item.insert()
+
                         transfer.append('items', {
-                            'item_code': item['item_code'],
+                            'item_code': item_code,
                             'qty': item['qty'],
                             'basic_rate': item['basic_rate'],
                             's_warehouse': item['s_warehouse'],
                             't_warehouse': item['t_warehouse'],
                             'cost_center': item['cost_center'],
                         })
-
+                    
+                    for item_with_valuation_rate in items:
+                        valuation_rate = frappe.db.get_value('Item', item_with_valuation_rate['item_code'], 'valuation_rate')
+                        if valuation_rate is None:
+                            valuation_rate = 2000
+                            frappe.db.set_value("Item", item_with_valuation_rate['item_code'], "valuation_rate", valuation_rate)
+                            frappe.db.commit()
+                            
                     transfer.insert()
                     transfer.submit()
                     frappe.msgprint(f"Stock Transfer '{name}' created and submitted successfully.")
 
-                    # Uncheck the custom_post field
                     patch_url = f"https://erp.metrogroupng.com/api/resource/Stock Entry/{name}"
                     patch_data = {
                         "custom_post": 0,
                         f"{server}": 0
                     }
                     requests.put(patch_url, headers=headers, json=patch_data)
-                    # frappe.log_error(f"STOCK TRANSFER '{name}' posted successfully.")
 
     except Exception as e:
         frappe.msgprint(f"Failed to fetch or process data: {e}")
