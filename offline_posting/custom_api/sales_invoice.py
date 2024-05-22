@@ -72,7 +72,8 @@ def get_submit_stock_transfer(doc=None):
                     
                     for item_with_valuation_rate in items:
                         valuation_rate = frappe.db.get_value('Item', item_with_valuation_rate['item_code'], 'valuation_rate')
-                        if valuation_rate is None:
+                        frappe.msgprint(str(valuation_rate))
+                        if valuation_rate == 0.0:
                             valuation_rate = 2000
                             frappe.db.set_value("Item", item_with_valuation_rate['item_code'], "valuation_rate", valuation_rate)
                             frappe.db.commit()
