@@ -7,7 +7,6 @@ from offline_posting.custom_post.server_post import local_server
 
 @frappe.whitelist()
 def get_submit_stock_transfer(doc=None):
-
     try:
         api_key, secret_key = get_api_keys()
         response_server = local_server()
@@ -44,50 +43,52 @@ def get_submit_stock_transfer(doc=None):
                         })
 
                 for name, items in items_by_name.items():
-                    transfer = frappe.new_doc('Stock Entry')
-                    transfer.purpose = "Material Transfer"
-                    transfer.stock_entry_type = "Material Transfer"
-                    transfer.custom_voucher_no = name
-                    transfer.company = items[0]['company']
-                    transfer.posting_date = items[0]['posting_date']
-                    
-                    for item in items:
-                        item_code = item['item_code']
-                        if not frappe.db.exists('Item', item_code):
-                            new_item = frappe.new_doc('Item')
-                            new_item.item_code = item_code
-                            new_item.item_group = 'All Item Groups'
-                            new_item.custom_company = transfer_data.get('company')
-                            new_item.valuation_rate = 2000
-                            new_item.insert()
+                    # Check if a Stock Entry with this custom_voucher_no already exists
+                    if not frappe.db.exists('Stock Entry', {'custom_voucher_no': name}):
+                        transfer = frappe.new_doc('Stock Entry')
+                        transfer.purpose = "Material Transfer"
+                        transfer.stock_entry_type = "Material Transfer"
+                        transfer.custom_voucher_no = name
+                        transfer.company = items[0]['company']
+                        transfer.posting_date = items[0]['posting_date']
 
-                        transfer.append('items', {
-                            'item_code': item_code,
-                            'qty': item['qty'],
-                            'basic_rate': item['basic_rate'],
-                            's_warehouse': item['s_warehouse'],
-                            't_warehouse': item['t_warehouse'],
-                            'cost_center': item['cost_center'],
-                        })
-                    
-                    for item_with_valuation_rate in items:
-                        valuation_rate = frappe.db.get_value('Item', item_with_valuation_rate['item_code'], 'valuation_rate')
-                        frappe.msgprint(str(valuation_rate))
-                        if valuation_rate == 0.0:
-                            valuation_rate = 2000
-                            frappe.db.set_value("Item", item_with_valuation_rate['item_code'], "valuation_rate", valuation_rate)
-                            frappe.db.commit()
-                            
-                    transfer.insert()
-                    transfer.submit()
-                    frappe.msgprint(f"Stock Transfer '{name}' created and submitted successfully.")
+                        for item in items:
+                            item_code = item['item_code']
+                            if not frappe.db.exists('Item', item_code):
+                                new_item = frappe.new_doc('Item')
+                                new_item.item_code = item_code
+                                new_item.item_group = 'All Item Groups'
+                                new_item.custom_company = item['company']
+                                new_item.valuation_rate = 2000
+                                new_item.insert()
 
-                    patch_url = f"https://erp.metrogroupng.com/api/resource/Stock Entry/{name}"
-                    patch_data = {
-                        "custom_post": 0,
-                        f"{server}": 0
-                    }
-                    requests.put(patch_url, headers=headers, json=patch_data)
+                            transfer.append('items', {
+                                'item_code': item_code,
+                                'qty': item['qty'],
+                                'basic_rate': item['basic_rate'],
+                                's_warehouse': item['s_warehouse'],
+                                't_warehouse': item['t_warehouse'],
+                                'cost_center': item['cost_center'],
+                            })
+
+                        for item_with_valuation_rate in items:
+                            valuation_rate = frappe.db.get_value('Item', item_with_valuation_rate['item_code'], 'valuation_rate')
+                            frappe.msgprint(str(valuation_rate))
+                            if valuation_rate == 0.0:
+                                valuation_rate = 2000
+                                frappe.db.set_value("Item", item_with_valuation_rate['item_code'], "valuation_rate", valuation_rate)
+                                frappe.db.commit()
+
+                        transfer.insert()
+                        transfer.submit()
+                        frappe.msgprint(f"Stock Transfer '{name}' created and submitted successfully.")
+
+                        patch_url = f"https://erp.metrogroupng.com/api/resource/Stock Entry/{name}"
+                        patch_data = {
+                            "custom_post": 0,
+                            f"{server}": 0
+                        }
+                        requests.put(patch_url, headers=headers, json=patch_data)
 
     except Exception as e:
         frappe.msgprint(f"Failed to fetch or process data: {e}")

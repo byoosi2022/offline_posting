@@ -41,32 +41,45 @@ def get_submit_purchase_receipts():
                         })
 
                 for name, items in items_by_name.items():
-                    receipt = frappe.new_doc('Purchase Receipt')
-                    receipt.supplier = items[0]['supplier']
-                    receipt.company = items[0]['company']
-                    receipt.posting_date = items[0]['posting_date']
-                    receipt.set_warehouse = items[0]['set_warehouse']
-                    receipt.custom_voucher_no = name
+                    # Check if a Purchase Receipt with this custom_voucher_no already exists
+                    if not frappe.db.exists('Purchase Receipt', {'custom_voucher_no': name}):
+                        receipt = frappe.new_doc('Purchase Receipt')
+                        receipt.supplier = items[0]['supplier']
+                        receipt.company = items[0]['company']
+                        receipt.posting_date = items[0]['posting_date']
+                        receipt.set_warehouse = items[0]['set_warehouse']
+                        receipt.custom_voucher_no = name
 
-                    for item in items:
-                        receipt.append('items', {
-                            'item_code': item['item_code'],
-                            'qty': item['qty'],
-                            'rate': item['rate']
-                        })
+                        for item in items:
+                            # Check if the item exists
+                            if not frappe.db.exists('Item', item['item_code']):
+                                # Create a new item if it doesn't exist
+                                new_item = frappe.new_doc('Item')
+                                new_item.item_code = item['item_code']
+                                new_item.item_name = item['item_code']
+                                new_item.item_group = 'All Item Groups'
+                                new_item.is_stock_item = 1
+                                new_item.company = item['company']
+                                new_item.insert()
 
-                    receipt.insert()
-                    receipt.submit()
-                    frappe.msgprint(f"Purchase Receipt '{name}' created and submitted successfully.")
+                            receipt.append('items', {
+                                'item_code': item['item_code'],
+                                'qty': item['qty'],
+                                'rate': item['rate']
+                            })
 
-                    # Uncheck the custom_post field
-                    patch_url = f"https://erp.metrogroupng.com/api/resource/Purchase%20Receipt/{name}"
-                    patch_data = {
-                        "custom_post": 0,
-                         f"{server}": 0
-                    }
+                        receipt.insert()
+                        receipt.submit()
+                        frappe.msgprint(f"Purchase Receipt '{name}' created and submitted successfully.")
 
-                    requests.put(patch_url, headers=headers, json=patch_data)
+                        # Uncheck the custom_post field
+                        patch_url = f"https://erp.metrogroupng.com/api/resource/Purchase%20Receipt/{name}"
+                        patch_data = {
+                            "custom_post": 0,
+                            f"{server}": 0
+                        }
+
+                        requests.put(patch_url, headers=headers, json=patch_data)
 
     except Exception as e:
         frappe.msgprint(f"Failed to fetch or process data: {e}")

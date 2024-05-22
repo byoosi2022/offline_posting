@@ -139,9 +139,13 @@ doc_events = {
 	# 	"on_trash": "method"
 	# }
  
-   "Lead": {
-        "before_save": "offline_posting.custom_post.access_server.access_server"
-    },
+#    "Lead": {
+#         "before_save": "offline_posting.custom_post.access_server.access_server"
+#     },
+   
+   "Sales Invoice": {
+       "validate": "offline_posting.api.validate_sales_invoice"
+}
    
 #      "Item": {
 #         "on_update": "offline_posting.custom_api.offline_sync.insert_item_post"

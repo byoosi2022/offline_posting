@@ -89,7 +89,33 @@ def get_all_customers():
     except Exception as e:
         frappe.log_error(f"Failed to fetch customers: {e}")
         return frappe.utils.response.report_error("Failed to fetch customers")
+    
+import frappe
+from frappe import _
 
+def validate_sales_invoice(doc, method):
+    items_with_insufficient_stock = []
+    
+    for item in doc.items:
+        maintain_stock = frappe.get_value("Item", item.item_code, "is_stock_item")
+        if maintain_stock:
+            # Fetch the actual stock quantity in the specific warehouse
+            actual_qty = frappe.db.get_value("Bin", {"item_code": item.item_code, "warehouse": item.warehouse}, "actual_qty") or 0
+            
+            if item.qty > actual_qty:
+                item_doc = frappe.get_doc("Item", item.item_code)
+                items_with_insufficient_stock.append({
+                    "item_code": item.item_code,
+                    "item_name": item_doc.item_name,
+                    "warehouse": item.warehouse,
+                    "qty_needed": item.qty - actual_qty
+                })
 
+    if items_with_insufficient_stock:
+        error_message = ""
+        for item in items_with_insufficient_stock:
+            error_message += f"Item Code: <b>{item['item_code']}</b><br>Warehouse: <b>{item['warehouse']}</b><br>Qty Needed: {item['qty_needed']}<br><br>"
 
+        frappe.local.flags.error_message_html = True
+        frappe.throw(_("Insufficient Stock For: <br>{0}").format(error_message))
 
