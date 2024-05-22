@@ -44,7 +44,8 @@ app_include_js = [
 doctype_js = {
     "Offline Sync": "public/js/custom_button.js",
     "Supplier": "public/js/supplier.js",
-    "Customer": "public/js/customer.js"
+    "Customer": "public/js/customer.js",
+    "Sales Invoice": "public/js/sales_invoice.js"
 }
 
 # Home Pages
