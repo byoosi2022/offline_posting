@@ -59,7 +59,7 @@ def get_submit_purchase_receipts():
                                 new_item.item_name = item['item_code']
                                 new_item.item_group = 'All Item Groups'
                                 new_item.is_stock_item = 1
-                                new_item.company = item['company']
+                                new_item.custom_company = item['company']
                                 new_item.insert()
 
                             receipt.append('items', {
