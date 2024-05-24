@@ -90,5 +90,5 @@ def check_internet_customer():
         frappe.db.set_value("System Settings", None, "custom_internet_available Customer", 0)
         frappe.db.commit()
 
-enqueue("offline_posting.custom_api.customers.check_internet_customer", queue='long')
+enqueue("offline_posting.custom_api.customers.check_internet_customer", queue='short')
 check_internet_customer()

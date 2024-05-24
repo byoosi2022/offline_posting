@@ -91,5 +91,5 @@ def check_internet_supplier():
         frappe.db.commit()
         # frappe.log_error(f"No Internet Available From supplier_live")
 
-enqueue("offline_posting.custom_api.supplier_live.check_internet_supplier", queue='long')
+enqueue("offline_posting.custom_api.supplier_live.check_internet_supplier", queue='short')
 check_internet_supplier()

@@ -123,7 +123,7 @@ def check_internet_user():
         frappe.db.commit()
 
 # Schedule check_internet function to run every 10 seconds
-enqueue("offline_posting.custom_post.user_post.check_internet_user", queue='long')
+enqueue("offline_posting.custom_post.user_post.check_internet_user", queue='short')
 
 # Start the check_internet loop
 check_internet_user()

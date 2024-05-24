@@ -110,6 +110,6 @@ def check_internet_customer():
         frappe.db.commit()
 
 # Schedule the job to run
-enqueue("offline_posting.custom_post.customer_post.check_internet_customer", queue='long')
+enqueue("offline_posting.custom_post.customer_post.check_internet_customer", queue='short')
 # Start the check_internet loop
 check_internet_customer()

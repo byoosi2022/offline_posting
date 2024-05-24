@@ -95,7 +95,7 @@ def check_internet_item_price_update():
         # frappe.log_error(f"No Internet Available from Remote From item_price_update ")
 
 # Schedule check_internet function to run every 10 seconds
-enqueue("offline_posting.custom_api.item_price_update.check_internet_item_price_update", queue='long')
+enqueue("offline_posting.custom_api.item_price_update.check_internet_item_price_update", queue='short')
 
 # Start the check_internet loop
 check_internet_item_price_update()

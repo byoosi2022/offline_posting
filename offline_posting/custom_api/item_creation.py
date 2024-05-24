@@ -93,6 +93,6 @@ def check_internet_item():
         frappe.db.commit()
          
 # Schedule check_internet function to run every 10 seconds
-enqueue("offline_posting.custom_api.item_creation.check_internet_item", queue='long')
+enqueue("offline_posting.custom_api.item_creation.check_internet_item", queue='short')
 # Assuming this code is running in a background job, so we don't need to enqueue it
 check_internet_item()

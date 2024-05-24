@@ -16,6 +16,7 @@
   "amended_from",
   "server_setings_section",
   "custom_local_server_1",
+  "sever_for_developer",
   "column_break_p5wgd",
   "custom_local_server_2",
   "custom_local_server_3"
@@ -93,11 +94,17 @@
    "fieldname": "custom_local_server_3",
    "fieldtype": "Check",
    "label": "Local Server 3"
+  },
+  {
+   "default": "0",
+   "fieldname": "sever_for_developer",
+   "fieldtype": "Check",
+   "label": "Local Sever For Developer"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-05-07 14:48:43.750753",
+ "modified": "2024-05-24 08:20:29.775145",
  "modified_by": "Administrator",
  "module": "Offline Posting",
  "name": "Offline Sync",

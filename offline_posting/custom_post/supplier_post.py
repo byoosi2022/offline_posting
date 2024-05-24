@@ -124,7 +124,7 @@ def check_internet_supplier():
         frappe.db.commit()
 
 # Schedule check_internet function to run every 10 seconds
-enqueue("offline_posting.custom_post.supplier_post.check_internet_supplier", queue='long')
+enqueue("offline_posting.custom_post.supplier_post.check_internet_supplier", queue='short')
 
 # Start the check_internet loop
 check_internet_supplier()

@@ -121,7 +121,7 @@ def check_internet():
         frappe.db.commit()
 
 # Schedule check_internet function to run every 10 seconds
-enqueue("offline_posting.custom_api.purchase_reciept.check_internet", queue='long')
+enqueue("offline_posting.custom_api.purchase_reciept.check_internet", queue='short')
 
 # Start the check_internet loop
 check_internet()

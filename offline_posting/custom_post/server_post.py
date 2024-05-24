@@ -3,7 +3,7 @@ import frappe # type: ignore
 @frappe.whitelist()
 def local_server():
     try:
-        servers = frappe.db.get_all("Offline Sync", fields=["custom_local_server_1","custom_local_server_2","custom_local_server_3"])
+        servers = frappe.db.get_all("Offline Sync", fields=["custom_local_server_1","sever_for_developer","custom_local_server_2","custom_local_server_3"])
         # Initialize a dictionary to store keys and their values
         server_values = {}
         # Iterate over each server dictionary
