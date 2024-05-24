@@ -14,7 +14,7 @@ def get_submit_purchase_receipts():
         for server, value in response_server.items():
             if value == 1:
                 filters_receipt = f'[["Purchase Receipt","docstatus","=","1"],["Purchase Receipt","{server}","=","1"],["Purchase Receipt","custom_voucher_no","=",""]]'
-                url = f"https://erp.metrogroupng.com/api/resource/Purchase%20Receipt?filters={filters_receipt}&fields=[%22name%22,%22supplier%22,%22posting_date%22,%22company%22,%22set_warehouse%22,%22items.item_code%22,%22items.qty%22,%22items.rate%22]"
+                url = f"https://erp.metrogroupng.com/api/resource/Purchase%20Receipt?filters={filters_receipt}&fields=[%22name%22,%22supplier%22,%22posting_date%22,%22company%22,%22set_warehouse%22,%22items.item_code%22,%22items.qty%22,%22items.rate%22]&limit_page_length=1000"
                 headers = {
                     "Content-Type": "application/json",
                     "Authorization": f"token {api_key}:{secret_key}"

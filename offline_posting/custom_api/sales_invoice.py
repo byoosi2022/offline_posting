@@ -14,7 +14,7 @@ def get_submit_stock_transfer(doc=None):
         for server, value in response_server.items():
             if value == 1:
                 filters_stock_transfer = f'[["Stock Entry","{server}","=","1"],["Stock Entry","stock_entry_type","=","Material Transfer"],["Stock Entry","docstatus","=","1"],["Stock Entry","custom_voucher_no","=",""]]'
-                url = f"https://erp.metrogroupng.com/api/resource/Stock%20Entry?filters={filters_stock_transfer}&fields=[%22name%22,%22from_warehouse%22,%22to_warehouse%22,%22company%22,%22posting_date%22,%22stock_entry_type%22,%22items.item_code%22,%22items.qty%22,%22items.basic_rate%22,%22items.cost_center%22,%22items.t_warehouse%22,%22items.s_warehouse%22]"
+                url = f"https://erp.metrogroupng.com/api/resource/Stock%20Entry?filters={filters_stock_transfer}&fields=[%22name%22,%22from_warehouse%22,%22to_warehouse%22,%22company%22,%22posting_date%22,%22stock_entry_type%22,%22items.item_code%22,%22items.qty%22,%22items.basic_rate%22,%22items.cost_center%22,%22items.t_warehouse%22,%22items.s_warehouse%22]&limit_page_length=1000"
                 headers = {
                     "Content-Type": "application/json",
                     "Authorization": f"token {api_key}:{secret_key}"
