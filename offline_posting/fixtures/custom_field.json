@@ -19,6 +19,15 @@
    },
    {
       "doctype": "Custom Field",
+      "dt": "Stock Reconciliation",
+      "label": "Voucher No",
+      "fieldtype": "Data",
+      "module": "Offline Posting",
+      "name": "Stock Reconciliation-custom_voucher_no",
+      "insert_after": "purpose"
+   },
+   {
+      "doctype": "Custom Field",
       "dt": "System Settings",
       "label": "Internet Available",
       "fieldtype": "Check",

@@ -44,28 +44,47 @@ def get_submit_purchase_receipts():
                     # Check if a Purchase Receipt with this custom_voucher_no already exists
                     if not frappe.db.exists('Purchase Receipt', {'custom_voucher_no': name}):
                         receipt = frappe.new_doc('Purchase Receipt')
-                        receipt.supplier = items[0]['supplier']
-                        receipt.company = items[0]['company']
-                        receipt.posting_date = items[0]['posting_date']
-                        receipt.set_warehouse = items[0]['set_warehouse']
+                        supplier = items[0]['supplier']
+                        company = items[0]['company']
+                        posting_date = items[0]['posting_date']
+                        set_warehouse = items[0]['set_warehouse']
+
+                        # Check if the supplier exists
+                        if not frappe.db.exists('Supplier', supplier):
+                            # Create a new supplier if it doesn't exist
+                            new_supplier = frappe.new_doc('Supplier')
+                            new_supplier.supplier_name = supplier
+                            new_supplier.supplier_type = 'Company'  # Assuming supplier type
+                            new_supplier.supplier_group = 'All Supplier Groups'
+                            new_supplier.custom_company = company
+                            new_supplier.insert()
+
+                        receipt.supplier = supplier
+                        receipt.company = company
+                        receipt.posting_date = posting_date
+                        receipt.set_warehouse = set_warehouse
                         receipt.custom_voucher_no = name
 
                         for item in items:
+                            item_code = item['item_code']
+                            qty = item['qty']
+                            rate = item['rate']
+
                             # Check if the item exists
-                            if not frappe.db.exists('Item', item['item_code']):
+                            if not frappe.db.exists('Item', item_code):
                                 # Create a new item if it doesn't exist
                                 new_item = frappe.new_doc('Item')
-                                new_item.item_code = item['item_code']
-                                new_item.item_name = item['item_code']
+                                new_item.item_code = item_code
+                                new_item.item_name = item_code
                                 new_item.item_group = 'All Item Groups'
                                 new_item.is_stock_item = 1
-                                new_item.custom_company = item['company']
+                                new_item.custom_company = company
                                 new_item.insert()
 
                             receipt.append('items', {
-                                'item_code': item['item_code'],
-                                'qty': item['qty'],
-                                'rate': item['rate']
+                                'item_code': item_code,
+                                'qty': qty,
+                                'rate': rate
                             })
 
                         receipt.insert()

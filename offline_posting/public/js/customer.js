@@ -277,4 +277,45 @@ frappe.ui.form.on('Stock Entry', {
     }
 });
 
+frappe.ui.form.on('Stock Reconciliation', {
+    refresh: function(frm) {
+        frm.add_custom_button(
+            __("Check A Reconciliation on Live"),
+            function () {
+                frappe.call({
+                    method: 'offline_posting.custom_post.checks.reconsilation_count.get_stock_reconciliation_count',
+                    callback: function(r) {
+                        if (r.message !== null) {
+                            var message = `
+                                <div>
+                                    <strong>Reconciliation Count:</strong> ${r.message.stock_reconciliation_count}<br>
+                                    
+                                </div>`;
+                            frappe.msgprint(message);
+                        } else {
+                            frappe.msgprint(__('No Unsynced Data available.'));
+                        }
+                    }
+                });
+            },
+            __("Download Data")
+        );
+         
+        frm.add_custom_button(
+            __("Syn Reconciliation Down"),
+            function () {
+                frappe.call({
+                    method: 'offline_posting.custom_api.stock_reconsilation.get_submit_stock_reconciliations',
+                    callback: function(response) {
+                        // console.log(response);
+                        // Handle the response here
+                    }
+                });
+               
+                
+            },
+            __("Download Data")
+        );
+    }
+});
 
