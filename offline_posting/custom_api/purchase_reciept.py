@@ -1,9 +1,9 @@
-import requests
-import frappe # type: ignore
-from frappe.utils.background_jobs import enqueue # type: ignore
+import frappe
+from frappe.utils.background_jobs import enqueue
 from offline_posting.utils import get_api_keys
 from datetime import timedelta
 import json
+import requests
 
 @frappe.whitelist()
 def post_saved_documents(doc=None, method=None, schedule_at=None):
@@ -20,12 +20,12 @@ def post_saved_documents(doc=None, method=None, schedule_at=None):
         "custom_return_code": "",
         "custom_voucher_no": "",
         "owner": current_user  # Ensure only documents owned by the current user
-    }, fields=["name", "paid_amount", "update_stock", "posting_date","posting_time", "customer", "company", "is_pos", "docstatus", "pos_profile"])
+    }, fields=["name", "paid_amount", "update_stock", "posting_date", "posting_time", "customer", "company", "is_pos", "docstatus", "pos_profile"])
 
     if not unsynced_docs:
         frappe.msgprint("No documents to post")
         return
- 
+
     for doc in unsynced_docs:
         try:
             items = frappe.get_all("Sales Invoice Item", filters={"parent": doc["name"]},
@@ -70,27 +70,28 @@ def post_saved_documents(doc=None, method=None, schedule_at=None):
                     "payments": payment_list
                 }
             }
-            # Print the data before posting
-            # frappe.msgprint(f"Data to be posted: {data}")
-            
-            response = requests.post(url, json=data, headers=headers)
-            
-            response.raise_for_status()
-            res = response.json()
-            res_json = json.dumps(res)
-            name = res["data"]["name"]
-            frappe.db.set_value("Sales Invoice", doc["name"], "custom_return_code", "Data Posted")
-            frappe.db.set_value("Sales Invoice", doc["name"], "custom_voucher_no", res["data"]["name"])
-            frappe.db.commit()
-            frappe.log_error(f"SI {doc['name']} posted successfully in the other PURCHASE RECIEPT.")
-            
-            # Uncheck the custom_post field
-            patch_url = f"https://erp.metrogroupng.com/api/resource/Sales Invoice/{name}"
-            patch_data = {"custom_voucher_no": doc["name"],"posting_date":posting_date_str}
-            requests.put(patch_url, headers=headers, json=patch_data)
-            
-            # Optionally, you can enqueue a background job to process the document
-            enqueue("offline_posting.custom_api.purchase_reciept.process_document", queue='long')
+
+            # Check for duplicates before posting
+            if ensure_no_duplicates_exist(doc, headers):
+                response = requests.post(url, json=data, headers=headers)
+                response.raise_for_status()
+                res = response.json()
+                res_json = json.dumps(res)
+                name = res["data"]["name"]
+                frappe.db.set_value("Sales Invoice", doc["name"], "custom_return_code", "Data Posted")
+                frappe.db.set_value("Sales Invoice", doc["name"], "custom_voucher_no", res["data"]["name"])
+                frappe.db.commit()
+                frappe.log_error(f"SI {doc['name']} posted successfully in the other PURCHASE RECIEPT.")
+
+                # Uncheck the custom_post field
+                patch_url = f"https://erp.metrogroupng.com/api/resource/Sales Invoice/{name}"
+                patch_data = {"custom_voucher_no": doc["name"],"posting_date":posting_date_str}
+                requests.put(patch_url, headers=headers, json=patch_data)
+
+                # Optionally, you can enqueue a background job to process the document
+                enqueue("offline_posting.custom_api.purchase_receipt.process_document", queue='long')
+            else:
+                frappe.msgprint(f"duplicates found for {doc['name']}. Skipping...")
         except (ValueError, requests.RequestException) as e:
             # Log the error
             frappe.log_error(f"Failed to post item {doc['name']}: {e}")
@@ -103,12 +104,29 @@ def post_saved_documents(doc=None, method=None, schedule_at=None):
                     frappe.msgprint(f"Failed to post item {doc['name']}: {error_message}")
             except KeyError:
                 pass  # No errors found in the response
-
             break
+
+def ensure_no_duplicates_exist(doc, headers):
+    try:
+        # Check if any Sales Invoice already has the same custom_voucher_no
+        filters = {
+            "custom_voucher_no": doc['name']
+        }
+        response = requests.get("https://erp.metrogroupng.com/api/resource/Sales%20Invoice",
+                                params={"filters": json.dumps(filters)},
+                                headers=headers)
+        data = response.json()
+        return len(data["data"]) == 0  # If no Sales Invoice has the same custom_voucher_no, return True (no duplicate)
+    except requests.exceptions.HTTPError as http_err:
+        frappe.log_error(f"HTTP error occurred: {http_err}")
+        raise
+    except Exception as err:
+        frappe.log_error(f"Other error occurred: {err}")
+        raise
 
 
 # Define a function to check internet connection
-def check_internet():
+def check_internet(doc=None, method=None,):
     try:
         requests.get("http://www.google.com", timeout=5)
         frappe.db.set_value("System Settings", None, "custom_internet_available", 1)
@@ -121,7 +139,7 @@ def check_internet():
         frappe.db.commit()
 
 # Schedule check_internet function to run every 10 seconds
-enqueue("offline_posting.custom_api.purchase_reciept.check_internet", queue='short')
+enqueue("offline_posting.custom_api.purchase_receipt.check_internet", queue='short')
 
 # Start the check_internet loop
 check_internet()

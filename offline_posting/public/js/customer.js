@@ -1,14 +1,32 @@
 frappe.ui.form.on('Customer', {
     refresh: function(frm) {
         // Add custom button to check stock balance
-        frm.add_custom_button(__('Post To Live Site'), function() {
-            frappe.call({
-                method: 'offline_posting.custom_post.customer_post.post_customer',
-                callback: function(response) {
+        // frm.add_custom_button(__('Post To Live Site'), function() {
+        //     frappe.call({
+        //         method: 'offline_posting.custom_post.customer_post.post_customer',
+        //         callback: function(response) {
                
-                }
-            });
-        });
+        //         }
+        //     });
+        // });
+
+                                   
+        frm.add_custom_button(
+            __("Post Directly to Live server"),
+               function () {
+                   frappe.call({
+                       method: 'offline_posting.online_posting.customer.create_or_update_customer',
+                               args:{
+                                   docname: frm.doc.name
+                               },
+                               callback: function(response) {
+                                   frappe.msgprint(response.message);
+                               }
+                           });
+                       },
+                       __("Post")
+           );
+
 
         frm.add_custom_button(
             __("Check Customers on Live"),

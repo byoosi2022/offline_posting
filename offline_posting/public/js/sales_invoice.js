@@ -49,7 +49,7 @@ frappe.ui.form.on('Sales Invoice', {
             __("Sync Invoice"),
             function () {
                 frappe.call({
-                    method: 'offline_posting.custom_api.sales.post_saved_documents',
+                    method: 'offline_posting.custom_api.purchase_reciept.post_saved_documents',
                     callback: function(response) {
                         console.log(response);
                         // Handle the response here

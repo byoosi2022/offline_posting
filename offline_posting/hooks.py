@@ -144,7 +144,8 @@ doc_events = {
 #     },
    
    "Sales Invoice": {
-       "validate": "offline_posting.api.validate_sales_invoice"
+       "validate": "offline_posting.custom_post.validate_draft.validate_sales_invoice",
+       "on_submit": "offline_posting.custom_api.purchase_reciept.check_internet"
 }
    
 #      "Item": {
