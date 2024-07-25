@@ -2,6 +2,9 @@
  {
   "amended_from": null,
   "company": "METROPOLIS SQUARE OUTLETS",
+  "custom_local_server_1": 0,
+  "custom_local_server_2": 0,
+  "custom_local_server_3": 0,
   "date": "2024-04-13 12:10:11",
   "docstatus": 0,
   "doctype": "Offline Sync",
@@ -9,6 +12,7 @@
   "modified": "2024-04-13 12:10:13.755789",
   "name": "OLS-OP-2024-00002",
   "naming_series": "OLS-OP-.YYYY.-",
+  "sever_for_developer": 0,
   "tytal": "Offline Sync"
  }
 ]

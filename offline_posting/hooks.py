@@ -229,7 +229,19 @@ scheduler_events = {
 # ----------
 # before_job = ["offline_posting.utils.before_job"]
 # after_job = ["offline_posting.utils.after_job"]
-fixtures = ['Custom Field','Offline Sync']
+# Your app's hooks.py
+
+fixtures = [
+    {
+        "dt": "Custom Field",
+        "filters": [
+            ["module", "=", "Offline Posting"]
+        ]
+    },
+    {
+        "dt": "Offline Sync"
+    }
+]
 
 
 # User Data Protection
