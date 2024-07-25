@@ -5,7 +5,7 @@ frappe.ui.form.on('Offline Sync', {
             function () {
                 frappe.call({
                     method: 'offline_posting.custom_api.offline_sync.insert_invpoice_post',
-                    args: { doc: frm.doc, document_type: frm.doc.document_type },
+                    args: { doc: frm.doc, document_type: frm.doc.document_type,posting_date:frm.doc.posting_date},
                     callback: function(r) {
                         // console.log(r);
                         if (r.message !== null) {
@@ -26,7 +26,8 @@ frappe.ui.form.on('Offline Sync', {
             __("Sync Invoice"),
             function () {
                 frappe.call({
-                    method: 'offline_posting.custom_api.purchase_reciept.post_saved_documents',
+                    method: 'offline_posting.custom_api.sales.post_saved_documents',
+                    args: {posting_date:frm.doc.posting_date},
                     callback: function(response) {
                         console.log(response);
                         // Handle the response here

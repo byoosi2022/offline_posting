@@ -1,7 +1,7 @@
 import frappe
 
 @frappe.whitelist()
-def insert_invpoice_post(doc, document_type, method=None):
+def insert_invpoice_post(doc, document_type, method=None,posting_date=None):
     current_user = frappe.session.user
     if document_type:
         unsynced_docs = frappe.db.get_all(document_type, filters={
@@ -9,6 +9,7 @@ def insert_invpoice_post(doc, document_type, method=None):
             "docstatus": 1,
             "custom_return_code": "",
             "custom_return_code": "",
+            "posting_date": posting_date,
              "owner": current_user  # Ensure only documents owned by the current user
         }, fields=["name"])
         unsynced_count = len(unsynced_docs)

@@ -29,7 +29,8 @@ frappe.ui.form.on('Sales Invoice', {
                 frappe.call({
                     method: 'offline_posting.custom_api.offline_sync.insert_invpoice_post',
                     args: { doc: frm.doc,
-                            document_type: "Sales Invoice"},
+                            document_type: "Sales Invoice",
+                            posting_date:frm.doc.posting_date},
                     callback: function(r) {
                         // console.log(r);
                         if (r.message !== null) {
@@ -50,6 +51,27 @@ frappe.ui.form.on('Sales Invoice', {
             function () {
                 frappe.call({
                     method: 'offline_posting.custom_api.purchase_reciept.post_saved_documents',
+                    args: { 
+                        posting_date: frm.doc.posting_date,
+                         },
+                    callback: function(response) {
+                        console.log(response);
+                        // Handle the response here
+                    }
+                });
+                
+            },
+            __("Sync Data")
+        );
+
+        frm.add_custom_button(
+            __("Post Doc"),
+            function () {
+                frappe.call({
+                    method: 'offline_posting.custom_api.sales_invo.post_saved_documents',
+                    args: { 
+                        posting_date: frm.doc.posting_date,
+                         },
                     callback: function(response) {
                         console.log(response);
                         // Handle the response here
