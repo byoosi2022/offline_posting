@@ -132,7 +132,11 @@ def ensure_no_duplicates_exist(doc, headers):
         raise
 
 
-# Define a function to check internet connection
+import time
+import requests
+import frappe
+from frappe.utils.background_jobs import enqueue
+
 def check_internet(doc=None, method=None,):
     try:
         requests.get("http://www.google.com", timeout=5)
@@ -145,8 +149,11 @@ def check_internet(doc=None, method=None,):
         frappe.db.set_value("System Settings", None, "custom_internet_available", 0)
         frappe.db.commit()
 
-# Schedule check_internet function to run every 10 seconds
-enqueue("offline_posting.custom_api.purchase_receipt.check_internet", queue='short')
+def start_check_internet_loop():
+    while True:
+        check_internet()
+        time.sleep(300)  # Sleep for 300 seconds (5 minutes)
 
-# Start the check_internet loop
-check_internet()
+# Start the loop
+enqueue("offline_posting.custom_api.purchase_receipt.start_check_internet_loop", queue='short')
+

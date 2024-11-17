@@ -143,7 +143,7 @@ def post_saved_documents(doc=None, method=None, schedule_at=None, posting_date=N
                 requests.put(patch_url, headers=headers, json=patch_data)
 
                 # Optionally, you can enqueue a background job to process the document
-                enqueue("offline_posting.custom_api.purchase_receipt.process_document", queue='long')
+                # enqueue("offline_posting.custom_api.purchase_receipt.process_document", queue='long')
             else:
                 frappe.msgprint(f"Duplicates found for {doc['name']}. Skipping...")
         except (ValueError, requests.RequestException) as e:
